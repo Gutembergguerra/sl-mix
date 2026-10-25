@@ -467,7 +467,7 @@ header .field label{font-size:.85rem}
     <h3>6. Editar o áudio de um canal</h3>
     <ol>
       <li>No canal, ative “Editar áudio”. Abre uma tela só daquele canal. Em “Canal a editar” dá para trocar de canal sem sair. No topo ficam Tocar (que vira Pausar), Parar e Concluir. Parar volta ao início, e Concluir fecha a tela. As mudanças já ficam valendo.</li>
-      <li>Para marcar ouvindo: ative Tocar, pause onde o trecho começa e ative “Marcar início aqui”. Ative Tocar de novo, pause onde ele termina e ative “Marcar fim aqui”. O Tocar continua de onde parou. Se passar do ponto, use “Voltar” e “Avançar”, que andam o tamanho do “Passo” escolhido, e marque outra vez. O leitor fala o ponto marcado e a duração.</li>
+      <li>Para marcar ouvindo: ative Tocar. A barra “Posição”, logo abaixo de “Canal”, anda enquanto a música toca; ao pausar, o leitor diz o tempo dela, e dá para ajustá-la com o dedo ou as setas. Pause onde o trecho começa e ative “Marcar início aqui”. Ative Tocar de novo, pause onde ele termina e ative “Marcar fim aqui”. Depois de marcado o início, o Tocar da tela começa sempre nele: se você pausar e tocar de novo, volta ao início marcado, para ouvir o trecho outra vez. Se passar do ponto, use “Voltar” e “Avançar”, que andam o tamanho do “Passo” escolhido, e marque outra vez. O leitor diz o que fez, por exemplo “Voltou 1 segundo. Posição: 12 segundos e 300 milissegundos”, e fala o ponto marcado e a duração. Para tocar a partir de outro ponto, use “Limpar seleção”, em “Mais edições”.</li>
       <li>Também dá para escrever o tempo do início em “Início” e o do fim em “Fim”, por exemplo 12.3 ou 1:05, ou usar “Início: voltar”, “Início: avançar”, “Fim: voltar” e “Fim: avançar” para acertar cada ponto.</li>
       <li>“Ouvir trecho” confere. Depois use Cortar, Copiar ou Colar no cursor. Desfazer e Refazer ficam logo abaixo. Silenciar, manter só a seleção, ajustar ao silêncio e as seleções rápidas ficam mais abaixo, em “Mais edições”.</li>
       <li>“Excluir todo o áudio do canal” esvazia o canal (pede para apertar de novo), e dá para desfazer.</li>
@@ -909,7 +909,8 @@ const N=6;
 let ctx=null,live=null;
 const region=document.getElementById('avisos');
 let quiet=false,dirty=false;
-function say(t){if(quiet)return;region.textContent='';setTimeout(()=>{region.textContent=t},40)}
+let lastSayAt=0;
+function say(t){if(quiet)return;lastSayAt=Date.now();region.textContent='';setTimeout(()=>{region.textContent=t},40)}
 const $=id=>document.getElementById(id);
 const SL={},SE={},TG={};
 const KEEP_SEL=['recMulti','mcomp','mrevt','mbar','recCh','recCount','edCh','edStep','tuCh','tuScale','tuKey','tuSpeed','tuRange','mp3q','vrPreset'];
@@ -1236,7 +1237,7 @@ function tick(){
     if(pk>cur)cur=pk;
     if(now-lastRot>1){prev=cur;cur=0;lastRot=now}
     setMeter(pk>0?20*Math.log10(pk):-90);
-    if(pk>=.98&&now-lastWarn>6){lastWarn=now;say('Master: sinal no limite')}
+    if(pk>=.98&&now-lastWarn>6&&Date.now()-lastSayAt>2500){lastWarn=now;say('Master: sinal no limite')}
   }
   raf=requestAnimationFrame(tick);
 }
@@ -2013,15 +2014,24 @@ for(let i=0;i<N;i++)grid.append(buildChannel(i));
     if(b2-a<.005){say('Não há trecho nessa região. Mova o cursor.');return}
     setSel(a,b2);say(msg+' Duração '+sec1(b2-a)+' segundos.')};
 
+  const stepText=()=>stepW.sel.options[stepW.sel.selectedIndex].text;
+  function cursorStep(dir){
+    if(!dur()){say('Nenhum áudio carregado.');return}
+    const before=pos(),np=Math.max(0,Math.min(dur(),Math.round((before+dir*stepSec())*1000)/1000));
+    if(Math.abs(np-before)<.0005){say(dir<0?'Já está no início do áudio.':'Já está no fim do áudio.');return}
+    seek(np-before,true);
+    say((dir<0?'Voltou ':'Avançou ')+stepText()+'. Posição: '+spokenPos(np)+'.');
+  }
   function nudge(which,dir){
     const c=editCh();if(!c)return;
+    const nome=which==='a'?'Início':'Fim';
     let base=sel[which];if(base==null)base=pos();
     const t=Math.max(0,Math.min(c.buffer.duration,Math.round((base+dir*stepSec())*1000)/1000));
+    if(Math.abs(t-base)<.0005&&sel[which]!=null){say(nome+(dir<0?' já está no início do áudio.':' já está no fim do áudio.'));return}
     sel[which]=t;seek(t-pos(),true);
-    afterMark((which==='a'?'Início':'Fim')+' em '+spokenPos(t)+'.');
+    afterMark(nome+(dir<0?' voltou ':' avançou ')+stepText()+', agora em '+spokenPos(t)+'.');
   }
   const more=h('div',{class:'pcol'},h('h3',{text:'Mais edições'}),
-      posW,
       h('div',{class:'row'},btn('Ir ao início',()=>goTo(0)),btn('Ir ao fim',()=>goTo(dur()))),
       reactS.wrap,
       btn('Selecionar o áudio todo',()=>selTo(null,null,'Áudio todo selecionado.')),
@@ -2149,8 +2159,9 @@ for(let i=0;i<N;i++)grid.append(buildChannel(i));
 
   const main=h('div',{class:'pcol'},
     edSelW,
+    posW,
     h('div',{class:'row'},btn('Marcar início aqui',markStart,'btn primary'),btn('Marcar fim aqui',markEnd,'btn primary')),
-    h('div',{class:'row'},btn('Voltar',()=>seek(-stepSec()),'btn',{'aria-label':'Voltar um passo'}),btn('Avançar',()=>seek(stepSec()),'btn',{'aria-label':'Avançar um passo'})),
+    h('div',{class:'row'},btn('Voltar',()=>cursorStep(-1),'btn',{'aria-label':'Voltar um passo'}),btn('Avançar',()=>cursorStep(1),'btn',{'aria-label':'Avançar um passo'})),
     stepW,
     wA,
     h('div',{class:'row'},btn('Início: voltar',()=>nudge('a',-1),'btn',{'aria-label':'Início: voltar um passo'}),btn('Início: avançar',()=>nudge('a',1),'btn',{'aria-label':'Início: avançar um passo'})),
@@ -2790,7 +2801,12 @@ function closeEd(){
   (cand||c.title).focus();say('Edição concluída. '+c.who+'.');
 }
 $('edClose').addEventListener('click',()=>closeEd());
-$('edPlay').addEventListener('click',()=>btnPlay.click());
+$('edPlay').addEventListener('click',()=>{
+  let from=null;
+  if(!playing&&R.state==='idle'&&sel.a!=null&&dur()){from=Math.max(0,Math.min(dur()-.06,sel.a));offset=from;showTime()}
+  btnPlay.click();
+  if(from!=null&&playing)say('Tocando a partir do início marcado, '+spokenPos(from)+'.');
+});
 $('edStop').addEventListener('click',()=>stopAll());
 new MutationObserver(()=>{$('edPlay').textContent=btnPlay.textContent}).observe(btnPlay,{childList:true,characterData:true,subtree:true});
 /* tela de efeitos de um canal (rack) */
