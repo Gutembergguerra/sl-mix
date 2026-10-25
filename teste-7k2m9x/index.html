@@ -477,7 +477,7 @@ header .field label{font-size:.85rem}
     <h3>6. Editar o áudio de um canal</h3>
     <ol>
       <li>No canal, ative “Editar áudio”. Abre uma tela só daquele canal. Em “Canal a editar” dá para trocar de canal sem sair. No topo ficam Tocar (que vira Pausar), Parar e Concluir. Parar volta ao início, e Concluir fecha a tela. As mudanças já ficam valendo.</li>
-      <li>Para marcar ouvindo: ative Tocar. A barra “Posição”, logo abaixo de “Canal”, anda enquanto a música toca; ao pausar, o leitor diz o tempo dela, e dá para ajustá-la com o dedo ou as setas. Pause onde o trecho começa e ative “Marcar início aqui”. Ative Tocar de novo, pause onde ele termina e ative “Marcar fim aqui”. Depois de marcado o início, o Tocar da tela começa sempre nele: se você pausar e tocar de novo, volta ao início marcado, para ouvir o trecho outra vez. Se passar do ponto, use “Voltar” e “Avançar”, que andam o tamanho do “Passo” escolhido, e marque outra vez. O leitor diz o que fez, por exemplo “Voltou 1 segundo. Posição: 12 segundos e 300 milissegundos”, e fala o ponto marcado e a duração. Para tocar a partir de outro ponto, use “Limpar seleção”, em “Mais edições”.</li>
+      <li>Para marcar ouvindo: ative Tocar. A barra “Posição”, logo abaixo de “Canal”, anda enquanto a música toca; ao pausar, o leitor diz o tempo dela, e dá para ajustá-la com o dedo ou as setas. Pause onde o trecho começa e ative “Marcar início aqui”. Ative Tocar de novo, pause onde ele termina e ative “Marcar fim aqui”. Depois de marcado o início, o Tocar da tela começa sempre nele: se você pausar e tocar de novo, volta ao início marcado, para ouvir o trecho outra vez. Se passar do ponto, use “Voltar” e “Avançar”, que andam o tamanho do “Passo” escolhido, e marque outra vez. O leitor fala o tempo no próprio botão, por exemplo “Voltar 1 segundo” ou “Avançar 100 milissegundos”, e ele muda quando você troca o Passo. O leitor diz o que fez, por exemplo “Voltou 1 segundo. Posição: 12 segundos e 300 milissegundos”, e fala o ponto marcado e a duração. Para tocar a partir de outro ponto, use “Limpar seleção”, em “Mais edições”.</li>
       <li>Também dá para escrever o tempo do início em “Início” e o do fim em “Fim”, por exemplo 12.3 ou 1:05, ou usar “Início: voltar”, “Início: avançar”, “Fim: voltar” e “Fim: avançar” para acertar cada ponto.</li>
       <li>“Ouvir trecho” confere. Depois use Cortar, Copiar ou Colar no cursor. Desfazer e Refazer ficam logo abaixo. Silenciar, manter só a seleção, ajustar ao silêncio e as seleções rápidas ficam mais abaixo, em “Mais edições”.</li>
       <li>“Excluir todo o áudio do canal” esvazia o canal (pede para apertar de novo), e dá para desfazer.</li>
@@ -2001,7 +2001,7 @@ for(let i=0;i<N;i++)grid.append(buildChannel(i));
   const cuts=[];let cutsCh=-1;
   edSelW=selectField('edCh','Canal',chOpts(),'0',(v,t)=>{$('edTitle').textContent='Editar áudio, '+t;if(cutsCh!==+v){cuts.length=0;cutsCh=+v;cutRender(0)}say('Editando '+t)});regChSel(edSelW.sel);
   edCur=h('output',{class:'tstat','aria-hidden':'true',text:'0:00.000'});
-  stepW=selectField('edStep','Passo',[['1','1 segundo'],['0.1','100 milissegundos'],['0.01','10 milissegundos']],'0.1',(v,t)=>say('Passo de '+t));
+  stepW=selectField('edStep','Passo',[['1','1 segundo'],['0.1','100 milissegundos'],['0.01','10 milissegundos']],'0.1',(v,t)=>{refreshStepLabels();say('Passo de '+t)});
   reactS=slider({id:'edReact',who,label:'Compensação ao marcar tocando',min:0,max:500,step:10,btn:50,value:150,spoken:sMs,short:vMs,onChange:()=>{}});
   reactS.val=()=>+reactS.input.value;
   const wA=textField('edA','Início',v=>{
@@ -2029,6 +2029,12 @@ for(let i=0;i<N;i++)grid.append(buildChannel(i));
     setSel(a,b2);say(msg+' Duração '+sec1(b2-a)+' segundos.')};
 
   const stepText=()=>stepW.sel.options[stepW.sel.selectedIndex].text;
+  const stepBtns=[];
+  function stepBtn(label,fn){
+    const b=btn(label,fn,'btn',{'aria-label':label+' '+stepText()});
+    stepBtns.push([b,label]);return b;
+  }
+  function refreshStepLabels(){const t=stepText();stepBtns.forEach(([b,l])=>b.setAttribute('aria-label',l+' '+t))}
   function cursorStep(dir){
     if(!dur()){say('Nenhum áudio carregado.');return}
     const before=pos(),np=Math.max(0,Math.min(dur(),Math.round((before+dir*stepSec())*1000)/1000));
@@ -2162,7 +2168,7 @@ for(let i=0;i<N;i++)grid.append(buildChannel(i));
       btn('Marcar divisão aqui',markCut,'btn primary'),
       cutW,
       btn('Ouvir antes e depois da divisão',cutListen),
-      h('div',{class:'row'},btn('Divisão: voltar',()=>cutNudge(-1),'btn',{'aria-label':'Divisão: voltar um passo'}),btn('Divisão: avançar',()=>cutNudge(1),'btn',{'aria-label':'Divisão: avançar um passo'})),
+      h('div',{class:'row'},stepBtn('Divisão: voltar',()=>cutNudge(-1)),stepBtn('Divisão: avançar',()=>cutNudge(1))),
       btn('Ajustar divisão ao silêncio',cutSnap),
       btn('Remover divisão',cutRemove,'btn quiet'),
       silW,
@@ -2175,12 +2181,12 @@ for(let i=0;i<N;i++)grid.append(buildChannel(i));
     edSelW,
     posW,
     h('div',{class:'row'},btn('Marcar início aqui',markStart,'btn primary'),btn('Marcar fim aqui',markEnd,'btn primary')),
-    h('div',{class:'row'},btn('Voltar',()=>cursorStep(-1),'btn',{'aria-label':'Voltar um passo'}),btn('Avançar',()=>cursorStep(1),'btn',{'aria-label':'Avançar um passo'})),
+    h('div',{class:'row'},stepBtn('Voltar',()=>cursorStep(-1)),stepBtn('Avançar',()=>cursorStep(1))),
     stepW,
     wA,
-    h('div',{class:'row'},btn('Início: voltar',()=>nudge('a',-1),'btn',{'aria-label':'Início: voltar um passo'}),btn('Início: avançar',()=>nudge('a',1),'btn',{'aria-label':'Início: avançar um passo'})),
+    h('div',{class:'row'},stepBtn('Início: voltar',()=>nudge('a',-1)),stepBtn('Início: avançar',()=>nudge('a',1))),
     wB,
-    h('div',{class:'row'},btn('Fim: voltar',()=>nudge('b',-1),'btn',{'aria-label':'Fim: voltar um passo'}),btn('Fim: avançar',()=>nudge('b',1),'btn',{'aria-label':'Fim: avançar um passo'})),
+    h('div',{class:'row'},stepBtn('Fim: voltar',()=>nudge('b',-1)),stepBtn('Fim: avançar',()=>nudge('b',1))),
     btn('Ouvir trecho',()=>{if(needSel())playRange(sel.a,sel.b,sel.a,'Tocando o trecho')}),
     h('div',{class:'row'},btn('Cortar',doCut,'btn primary'),btn('Copiar',doCopy),btn('Colar no cursor',doPaste)),
     h('div',{class:'row'},

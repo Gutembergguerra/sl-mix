@@ -83,6 +83,7 @@ Pendente: o autor testar com TalkBack e NVDA; ajustes pedidos por ele; depois la
 - Feito na 1.1 (cache teste v10): tirados os títulos "Canais" e "Ir para" (a lista "Ir para" tem o nome dentro do campo); limpeza de código sem uso; tela Editar áudio reorganizada a pedido do autor: no topo Tocar/Pausar, Parar (volta ao início) e Concluir; depois Marcar início aqui, Marcar fim aqui, Voltar e Avançar (andam o cursor pelo Passo), Passo, Início e Fim, Ouvir trecho, Cortar, Copiar, Colar, Desfazer, Refazer, inserir/colocar arquivo, Mais edições e Separar em faixas, tudo à vista, sem grupos fechados.
 - Feito na 1.1 (cache teste v12): na tela Editar áudio, o Tocar sempre começa no início marcado (se houver); Voltar/Avançar e Início/Fim: voltar/avançar dizem direção, tempo do passo e posição ("Voltou 1 segundo. Posição: ..."); a barra Posição ficou logo abaixo de Canal; o aviso "Master: sinal no limite" não cobre mais outras mensagens (espera 2,5 s depois de qualquer aviso).
 - Feito na 1.1 (cache teste v13): durante a gravação o app não fala "Master: sinal no limite" (incomodava quem canta); se o som chegar ao limite, avisa uma vez só ao concluir a gravação. Teste: pw_v17.py.
+- Feito na 1.1 (cache teste v14): os botões Voltar, Avançar, Início/Fim: voltar/avançar e Divisão: voltar/avançar falam o tempo do Passo no próprio nome ("Voltar 1 segundo"), e o nome muda quando se troca o Passo. O autor não quer "um passo" nos nomes.
 - Regra de trabalho: a cada mudança, já remover o que ficar sem uso no código.
 
 ## Código-fonte (pasta `fonte`)
