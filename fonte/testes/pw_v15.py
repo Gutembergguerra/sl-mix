@@ -18,7 +18,7 @@ async def main():
         await pg.goto('http://localhost:8784/index.html');await pg.wait_for_timeout(300)
         for _ in range(2): await pg.click('#btnAddCh')
         await pg.set_input_files('#inc1','/tmp/voz_teste.wav');await pg.wait_for_timeout(1200)
-        await pg.evaluate("(()=>{const sec=document.querySelector('[data-ch=\"1\"]');Array.from(sec.querySelectorAll('button')).find(x=>x.offsetParent!==null&&/, efeitos$/.test(x.getAttribute('aria-label')||'')).click()})()");await pg.wait_for_timeout(250)
+        await pg.evaluate("(()=>{const sec=document.querySelector('[data-ch=\"1\"]');Array.from(sec.querySelectorAll('button')).find(x=>x.offsetParent!==null&&/, FX, efeitos e presets$/.test(x.getAttribute('aria-label')||'')).click()})()");await pg.wait_for_timeout(250)
         await pg.click('#fxBody > details.fx:has(summary[aria-label$="afinação de voz"]) > summary')
         ck('afinação vale para o canal 2',await pg.input_value('#tuCh')=='1')
         await pg.click('#fxBody button:text-is("Afinar a voz")');await pg.wait_for_timeout(3500)

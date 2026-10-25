@@ -15,7 +15,7 @@ async def main():
         # menu do canal (compacto) + voltar
         await pg.select_option('#viewSel','compacto')
         await pg.click('button[aria-label="Canal 1, ajustes e efeitos"]');await pg.wait_for_timeout(150)
-        await pg.click('#menuBody button[aria-label="Canal 1, efeitos"]');await pg.wait_for_timeout(150)
+        await pg.click('#menuBody button[aria-label="Canal 1, FX, efeitos e presets"]');await pg.wait_for_timeout(150)
         await pg.click('details.fx:has(summary[aria-label="Canal 1, equalizador"]) summary')
         await pg.go_back();await pg.wait_for_timeout(200)
         ck('voltar fecha só a tela de Efeitos',not await pg.is_visible('#fxLayer') and await pg.is_visible('#menuLayer'))
@@ -37,17 +37,17 @@ async def main():
         ck('voltar fecha o painel',not await pg.is_visible('#vc0') and pg.url==url)
         # fechar painel pelo botão e abrir dialogo: sequência
         await pg.click('button[aria-label="Canal 1, volume"]');await pg.click('button[aria-label="Canal 1, volume"]');await pg.wait_for_timeout(250)
-        await pg.click('button[aria-label="Canal 1, mais ajustes: presets, copiar efeitos, restaurar"]');await pg.wait_for_timeout(100)
+        await pg.click('button[aria-label="Canal 1, mais ajustes: copiar efeitos, restaurar"]');await pg.wait_for_timeout(100)
         await pg.go_back();await pg.wait_for_timeout(200)
         ck('voltar depois de painel fechado fecha o menu',not await pg.is_visible('#menuLayer') and pg.url==url)
-        # presets na faixa
-        await pg.click('button[aria-label="Canal 1, presets"]');await pg.wait_for_timeout(100)
-        ck('lista de presets aparece',await pg.is_visible('#prp0') if False else await pg.is_visible('#prp0'))
-        ck('foco na lista',await pg.evaluate("document.activeElement.id")=='prp0')
-        await pg.select_option('#prp0','vozeco');await pg.wait_for_timeout(100)
+        # presets dentro do FX
+        await pg.click('button[aria-label="Canal 1, FX, efeitos e presets"]');await pg.wait_for_timeout(200)
+        ck('lista de presets aparece no FX',await pg.is_visible('#prc0'))
+        await pg.select_option('#prc0','vozeco');await pg.wait_for_timeout(100)
         ck('preset com eco liga delay',await pg.get_attribute('#doc0','aria-pressed')=='true' and await pg.input_value('#pgc0')=='3',await pg.evaluate("document.getElementById('avisos').textContent"))
-        await pg.select_option('#prp0','limpo')
+        await pg.select_option('#prc0','limpo')
         ck('limpo desliga',await pg.get_attribute('#doc0','aria-pressed')=='false')
+        await pg.click('#fxClose');await pg.wait_for_timeout(150)
         # Gravar duplicado
         vis=await pg.evaluate("[...document.querySelectorAll('button')].filter(b=>/^Gravar/.test(b.textContent)&&b.offsetParent!==null).map(b=>b.id)")
         ck('só um botão Gravar visível',vis==['btnRec'],str(vis))

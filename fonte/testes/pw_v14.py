@@ -15,7 +15,7 @@ async def main():
             async def say():
                 await pg.wait_for_timeout(150);return await pg.evaluate("document.getElementById('avisos').textContent")
             async def open_rack(k):
-                await pg.evaluate("(k)=>{const sec=document.querySelector('[data-ch=\"'+k+'\"]');sec.scrollIntoView();const b=Array.from(sec.querySelectorAll('button')).find(x=>x.offsetParent!==null&&/, efeitos$/.test(x.getAttribute('aria-label')||''));if(!b)throw new Error('sem botão Efeitos');b.click()}",k)
+                await pg.evaluate("(k)=>{const sec=document.querySelector('[data-ch=\"'+k+'\"]');sec.scrollIntoView();const b=Array.from(sec.querySelectorAll('button')).find(x=>x.offsetParent!==null&&/, FX, efeitos e presets$/.test(x.getAttribute('aria-label')||''));if(!b)throw new Error('sem botão Efeitos');b.click()}",k)
                 await pg.wait_for_timeout(250)
             async def open_det(label):
                 await pg.click('#fxBody > details.fx:has(summary[aria-label$="%s"]) > summary'%label);await pg.wait_for_timeout(120)
@@ -27,10 +27,16 @@ async def main():
             # rack do canal 1
             await open_rack(0)
             ck('tela Efeitos abre',await pg.is_visible('#fxLayer'))
-            ck('foco no título','Efeitos, Canal 1'==await pg.inner_text('#fxTitle') and await pg.evaluate("document.activeElement.id")=='fxTitle',await pg.inner_text('#fxTitle'))
+            ck('foco no título','FX, Canal 1'==await pg.inner_text('#fxTitle') and await pg.evaluate("document.activeElement.id")=='fxTitle',await pg.inner_text('#fxTitle'))
             sums=await pg.evaluate("[...document.querySelectorAll('#fxBody > details.fx > summary')].map(b=>b.textContent)")
             ck('lista com os 6 efeitos',sums==['Pré-amplificador','Equalizador','Delay','Chorus','Reverb de voz','Afinação de voz'],str(sums))
+            ck('presets dentro do FX, no começo',await pg.evaluate("document.getElementById('fxBody').firstElementChild.contains(document.getElementById('prc0'))"))
+            ck('presets saíram do menu Mais',not await pg.evaluate("!!document.querySelector('.xtra select[id^=\"pr\"]:not([id^=\"prc\"])')") and await pg.evaluate("!document.querySelector('.xtra #prc0')"))
+            await pg.select_option('#prc0','violao');await pg.wait_for_timeout(200)
+            t=await say();ck('preset aplicado fala o canal e o preset','Canal 1: preset aplicado' in t and 'Violão' in t,t)
+            ck('preset mexeu no equalizador',await pg.input_value('#elc0')!='0' or await pg.input_value('#ehc0')!='0',await pg.input_value('#ehc0'))
             ck('todos fechados',await pg.evaluate("[...document.querySelectorAll('#fxBody > details.fx')].every(d=>!d.open)"))
+            ck('barra Faixas sem botão Presets',await pg.evaluate("!Array.from(document.querySelectorAll('.tbar button')).some(b=>b.textContent==='Presets')"))
             ck('principal inerte',await pg.evaluate("document.getElementById('main').inert"))
             # reverb: envio do canal 1
             await open_det('reverb de voz, desligado')
@@ -39,7 +45,7 @@ async def main():
             await pg.focus('#vsc0')
             for _ in range(4): await pg.keyboard.press('ArrowRight')
             ck('envio 20 por cento',(await pg.get_attribute('#vsc0','aria-valuetext'))=='20 por cento',await pg.get_attribute('#vsc0','aria-valuetext'))
-            ck('resumo fala o envio',(await pg.evaluate("document.querySelector('#fxBody > details.fx:nth-child(5) > summary').getAttribute('aria-label')"))=='Canal 1, reverb de voz, envio 20 por cento')
+            ck('resumo fala o envio',(await pg.evaluate("document.querySelector('#fxBody > details.fx:nth-child(6) > summary').getAttribute('aria-label')"))=='Canal 1, reverb de voz, envio 20 por cento')
             # afinação
             await open_det('afinação de voz')
             ck('botão Afinar a voz visível',await pg.is_visible('#fxBody button:text-is("Afinar a voz")'))
@@ -50,7 +56,7 @@ async def main():
             ck('detalhes voltaram ao canal',await pg.evaluate("document.querySelector('[data-ch=\"0\"]').contains(document.getElementById('elc0'))"))
             # canal 2 independente
             await open_rack(1)
-            ck('tela Efeitos do canal 2','Efeitos, Canal 2'==await pg.inner_text('#fxTitle'),await pg.inner_text('#fxTitle'))
+            ck('tela Efeitos do canal 2','FX, Canal 2'==await pg.inner_text('#fxTitle'),await pg.inner_text('#fxTitle'))
             await open_det('reverb de voz, desligado')
             await pg.focus('#vsc1')
             for _ in range(8): await pg.keyboard.press('ArrowRight')
@@ -59,14 +65,14 @@ async def main():
             await open_det('afinação de voz')
             ck('canal da afinação agora é o 2',await pg.input_value('#tuCh')=='1')
             await pg.click('#fxClose');await pg.wait_for_timeout(200)
-            ck('foco volta ao botão Efeitos',(await pg.evaluate("document.activeElement.getAttribute('aria-label')")).endswith('efeitos'),await pg.evaluate("document.activeElement.getAttribute('aria-label')"))
+            ck('foco volta ao botão Efeitos',(await pg.evaluate("document.activeElement.getAttribute('aria-label')")).endswith('efeitos e presets'),await pg.evaluate("document.activeElement.getAttribute('aria-label')"))
             # nome do canal acompanha o rack
             await pg.evaluate("(k)=>{const sec=document.querySelector('[data-ch=\"0\"]');Array.from(sec.querySelectorAll('button')).find(x=>x.offsetParent!==null&&/(ajustes e efeitos|mais ajustes)/.test(x.getAttribute('aria-label')||'')).click()}",0)
             await pg.wait_for_timeout(250)
             await pg.fill('#nmc0','Violão');await pg.press('#nmc0','Tab');await pg.wait_for_timeout(200)
-            await pg.click('#menuBody button[aria-label="Violão, efeitos"]');await pg.wait_for_timeout(200)
-            ck('título do rack com o nome','Efeitos, Violão'==await pg.inner_text('#fxTitle'),await pg.inner_text('#fxTitle'))
-            ck('resumo do reverb com o nome',(await pg.evaluate("document.querySelector('#fxBody > details.fx:nth-child(5) > summary').getAttribute('aria-label')"))=='Violão, reverb de voz, envio 20 por cento')
+            await pg.click('#menuBody button[aria-label="Violão, FX, efeitos e presets"]');await pg.wait_for_timeout(200)
+            ck('título do rack com o nome','FX, Violão'==await pg.inner_text('#fxTitle'),await pg.inner_text('#fxTitle'))
+            ck('resumo do reverb com o nome',(await pg.evaluate("document.querySelector('#fxBody > details.fx:nth-child(6) > summary').getAttribute('aria-label')"))=='Violão, reverb de voz, envio 20 por cento')
             await pg.go_back();await pg.wait_for_timeout(250)
             ck('voltar fecha só a tela de Efeitos',not await pg.is_visible('#fxLayer') and await pg.is_visible('#menuLayer'))
             await pg.click('#menuClose');await pg.wait_for_timeout(200)
