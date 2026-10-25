@@ -456,7 +456,7 @@ header .field label{font-size:.85rem}
     <h3>5. Gravar em um canal</h3>
     <ol>
       <li>Use fones de ouvido.</li>
-      <li>Em cada canal que vai gravar, ative o botão “Armar”, ao lado de Mudo e Solo. Pode armar um ou vários canais.</li><li>O botão “Gravar” fica no topo, ao lado de Tocar, sempre à vista. Ative-o para começar. O foco do leitor de tela fica nele, e ele passa a se chamar “Parar gravação”: para terminar, é só dar o toque duplo em qualquer lugar da tela, sem procurar o botão. Dentro da tela “Ajustes e efeitos” de um canal também há um botão Gravar. Com uma mesa ou placa de duas entradas, o primeiro canal armado grava a entrada 1 e o segundo grava a entrada 2. Com microfone do celular, o mesmo som vai para todos os canais armados. Isso pode ser mudado em “Vários canais armados”, na seção Gravação. Sem nenhum canal armado, ele grava no canal escolhido em “Canal para gravar”, na seção Gravação.</li>
+      <li>Em cada canal que vai gravar, ative o botão “Armar”, ao lado de Mudo e Solo. Pode armar um ou vários canais.</li><li>Durante a gravação o aplicativo fica em silêncio, sem avisos de som alto, para não atrapalhar quem canta. Se o som chegar ao limite, ele avisa uma vez só, quando a gravação terminar.</li><li>O botão “Gravar” fica no topo, ao lado de Tocar, sempre à vista. Ative-o para começar. O foco do leitor de tela fica nele, e ele passa a se chamar “Parar gravação”: para terminar, é só dar o toque duplo em qualquer lugar da tela, sem procurar o botão. Dentro da tela “Ajustes e efeitos” de um canal também há um botão Gravar. Com uma mesa ou placa de duas entradas, o primeiro canal armado grava a entrada 1 e o segundo grava a entrada 2. Com microfone do celular, o mesmo som vai para todos os canais armados. Isso pode ser mudado em “Vários canais armados”, na seção Gravação. Sem nenhum canal armado, ele grava no canal escolhido em “Canal para gravar”, na seção Gravação.</li>
       <li>Se quiser, ligue o metrônomo na seção Metrônomo e escolha em “Contagem antes de gravar” se quer 3, 2, 1, um compasso ou nada.</li>
       <li>Toque ou cante. Os canais que não estão sendo gravados tocam nos fones durante a gravação.</li>
       <li>A primeira vez, aceite a permissão de microfone do navegador. Se houver mais de um microfone, escolha em “Entrada de áudio”.</li>
@@ -513,7 +513,7 @@ header .field label{font-size:.85rem}
     </ul>
 
     <h3>Novidades</h3>
-    <p>Versão 1.1 (teste): tela Editar áudio reorganizada, com Tocar, Parar, Marcar início, Marcar fim, Voltar e Avançar logo no começo e sem grupos fechados; tela mais limpa, sem os títulos Canais e Ir para; botão FX em cada canal, com os presets e a lista de pré-amplificador, equalizador, delay, chorus, reverb de voz e afinação de voz, todos opcionais; reverb de voz com envio por canal; nome do canal à sua escolha, por exemplo Violão e Voz; mesa que abre vazia, com Adicionar canal e Remover canal; menu Projetos reorganizado, com Novo projeto; botão Editar áudio em cada canal, com tela própria; Inserir arquivo no cursor e Colocar arquivo a partir do cursor, para emendar e para locução sobre trilha; Separar em faixas, com divisões marcadas ouvindo e arquivo ZIP.</p>
+    <p>Versão 1.1 (teste): sem avisos de som alto durante a gravação; tela Editar áudio reorganizada, com Tocar, Parar, Marcar início, Marcar fim, Voltar e Avançar logo no começo e sem grupos fechados; tela mais limpa, sem os títulos Canais e Ir para; botão FX em cada canal, com os presets e a lista de pré-amplificador, equalizador, delay, chorus, reverb de voz e afinação de voz, todos opcionais; reverb de voz com envio por canal; nome do canal à sua escolha, por exemplo Violão e Voz; mesa que abre vazia, com Adicionar canal e Remover canal; menu Projetos reorganizado, com Novo projeto; botão Editar áudio em cada canal, com tela própria; Inserir arquivo no cursor e Colocar arquivo a partir do cursor, para emendar e para locução sobre trilha; Separar em faixas, com divisões marcadas ouvindo e arquivo ZIP.</p>
     <p>Versão 1.0: primeira versão publicada, com seis canais e Master, gravação em um ou vários canais, efeitos e presets por canal, edição, afinação de voz, reverb de voz, projetos e exportação em WAV e MP3.</p>
     <p class="hint">SL-Mix: Áudio Acessível. Versão 1.1. © 2026 Gutenberg Guerra Lima. Todos os direitos reservados.</p>
     <p><button type="button" class="btn primary" id="helpClose2">Fechar instruções</button></p>
@@ -1011,7 +1011,7 @@ const MT={bpm:100,bar:4,vol:-8,on:false,withPlay:false,auto:false,timer:0,next:0
 const R={state:'idle',cancel:false,chunks:[],stream:null,src:null,node:null,mon:null,zero:null,ch:null,chs:[],nIn:1,sep:false,startPos:0,devId:'',monitor:false,lat:0,wl:false};
 const sel={a:null,b:null};
 let clip=null;
-let meterEl=null,meterBox=null,cur=0,prev=0,lastRot=0,lastWarn=0;
+let meterEl=null,meterBox=null,cur=0,prev=0,lastRot=0,lastWarn=0,clipRec=false;
 
 /* ---------- grafo de áudio ---------- */
 function setP(C,p,v,imm){if(imm)p.value=v;else p.setTargetAtTime(v,C.currentTime,.02)}
@@ -1237,7 +1237,10 @@ function tick(){
     if(pk>cur)cur=pk;
     if(now-lastRot>1){prev=cur;cur=0;lastRot=now}
     setMeter(pk>0?20*Math.log10(pk):-90);
-    if(pk>=.98&&now-lastWarn>6&&Date.now()-lastSayAt>2500){lastWarn=now;say('Master: sinal no limite')}
+    if(pk>=.98){
+      if(R.state!=='idle')clipRec=true;
+      else if(now-lastWarn>6&&Date.now()-lastSayAt>2500){lastWarn=now;say('Master: sinal no limite')}
+    }
   }
   raf=requestAnimationFrame(tick);
 }
@@ -1534,7 +1537,7 @@ async function startRecording(){
     R.src.connect(R.node);R.node.connect(R.zero);R.zero.connect(ctx.destination);
     if(R.monitor){R.mon=ctx.createGain();R.src.connect(R.mon);R.mon.connect(ctx.destination)}
   }catch(e){releaseCapture();R.state='idle';recLabel();say('Não foi possível iniciar a captura de áudio.');return}
-  R.ch=c;R.chs=tg;R.startPos=offset;R.state='rec';
+  R.ch=c;R.chs=tg;R.startPos=offset;R.state='rec';clipRec=false;
   R.sep=multiW.sel.value==='separado'&&R.nIn>1&&tg.length>1;
   if(tg.length>1&&multiW.sel.value==='separado'&&R.nIn<2)say('Esta entrada tem só um canal. O mesmo som vai para todos os canais armados.');
   rangeEnd=null;
@@ -1574,7 +1577,8 @@ function stopRecording(){
   edSelW.sel.value=String(c.i);
   setSel(R.startPos,R.startPos+secs);
   offset=R.startPos;showTime();
-  say('Gravação concluída '+(tg.length===1?c.no:'nos canais '+tg.map(x=>x.custom||x.i+1).join(', '))+', '+sec1(secs)+' segundos. O trecho gravado ficou selecionado e o cursor voltou ao início dele.');
+  say('Gravação concluída '+(tg.length===1?c.no:'nos canais '+tg.map(x=>x.custom||x.i+1).join(', '))+', '+sec1(secs)+' segundos. O trecho gravado ficou selecionado e o cursor voltou ao início dele.'+(clipRec?' Atenção: o som chegou ao limite durante a gravação. Se ouvir distorção, abaixe o volume.':''));
+  clipRec=false;
 }
 
 /* ---------- edição ---------- */
