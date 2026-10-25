@@ -38,7 +38,6 @@ async def main():
             # tocar na tela e pausar
             await pg.click('#edPlay');await pg.wait_for_timeout(1500);await pg.click('#edPlay');await pg.wait_for_timeout(200)
             # marcar divisões
-            await pg.click('summary:text-is("Separar em faixas")')
             await pg.click('text=Marcar divisão aqui');ck('divisão 1','Divisão 1 marcada' in await say(),await say())
             await pg.evaluate("document.getElementById('edPlay').click()");await pg.wait_for_timeout(1200);await pg.evaluate("document.getElementById('edPlay').click()")
             await pg.click('text=Marcar divisão aqui');ck('divisão 2','Divisão 2' in await say(),await say())

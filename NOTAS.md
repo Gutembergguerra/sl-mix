@@ -79,13 +79,13 @@ Novidades da 1.1: botão FX em cada canal, que abre a tela de efeitos do canal c
 Pendente: o autor testar com TalkBack e NVDA; ajustes pedidos por ele; depois lançar como oficial.
 
 ## Pendências combinadas
-- Tirar da tela o título "Ir para" que fica em cima da lista (a que mostra "Escolher destino…"). A lista continua; o nome "Ir para" passa para dentro do campo (aria-label) e o texto de fora some, para o leitor falar uma vez só.
-- Nenhuma outra por enquanto. O autor decidiu manter a seção Gravação e a lista "Ir para" como estão, e ainda está testando; ele junta os próximos pedidos numa mudança só.
-- Limpeza feita na 1.1 (cache teste v9): tirado o título "Canais" da tela (Ir para > Canais agora leva ao botão Adicionar canal), o menu antigo de efeitos da faixa, estilos e funções sem uso. Ao programar, remover o que ficar sem uso para o código não crescer.
+- Nenhuma por enquanto. O autor decidiu manter a seção Gravação como está e ainda está testando; ele junta os próximos pedidos numa mudança só.
+- Feito na 1.1 (cache teste v10): tirados os títulos "Canais" e "Ir para" (a lista "Ir para" tem o nome dentro do campo); limpeza de código sem uso; tela Editar áudio reorganizada a pedido do autor: no topo Tocar/Pausar, Parar (volta ao início) e Concluir; depois Marcar início aqui, Marcar fim aqui, Voltar e Avançar (andam o cursor pelo Passo), Passo, Início e Fim, Ouvir trecho, Cortar, Copiar, Colar, Desfazer, Refazer, inserir/colocar arquivo, Mais edições e Separar em faixas, tudo à vista, sem grupos fechados.
+- Regra de trabalho: a cada mudança, já remover o que ficar sem uso no código.
 
 ## Código-fonte (pasta `fonte`)
 - `fonte/app-body.html`: fonte do app (um IIFE em JavaScript, funções puras entre `/*PURE-START*/` e `/*PURE-END*/`).
 - `fonte/build.py`: gera `site/index.html` e a cópia de teste. Os caminhos dentro dele são `/home/claude/mesa/...`: ajustar para a pasta onde estiver. Precisa de `site/` com sw.js, manifest e ícones (iguais aos da raiz deste repositório). Aumentar o número do cache de teste (`sl-mix-teste-vN`) a cada publicação.
 - `fonte/test.js` e `fonte/test_tune.js`: testes das funções puras (`node test.js`).
-- `fonte/testes/*.py`: testes de navegador (Playwright; o mais novo é pw_v14.py, rack de efeitos e envio de reverb; pw_v15.py, afinação; pw_v13.py, nome dos canais; pw_v12.py, Editar áudio). Os testes pw2_v2 e pw3_v2 (seções antigas de afinação e reverb) foram removidos. `run6.py arquivo.py` adiciona 6 canais antes de rodar os testes antigos. Servem um site em `/home/claude/mesa/site`.
+- `fonte/testes/*.py`: testes de navegador (Playwright; o mais novo é pw_v16.py, fluxo de marcar e cortar na tela Editar áudio; pw_v14.py, FX e envio de reverb; pw_v15.py, afinação; pw_v13.py, nome dos canais; pw_v12.py, Editar áudio). Os testes pw2_v2 e pw3_v2 (seções antigas de afinação e reverb) foram removidos. `run6.py arquivo.py` adiciona 6 canais antes de rodar os testes antigos. Servem um site em `/home/claude/mesa/site`.
 - Publicar: copiar `site/teste-7k2m9x/*` para a pasta `teste-7k2m9x` deste repositório. O remote precisa continuar `https://github.com/Gutembergguerra/mesa-digital` (o proxy só autoriza o nome antigo; o push redireciona).

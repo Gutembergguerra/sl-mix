@@ -24,6 +24,6 @@ for f in ('icon-192.png','icon-512.png'):
 mf=open('/home/claude/mesa/site/manifest.webmanifest',encoding='utf-8').read()
 mf=mf.replace('"name": "SL-Mix: Áudio Acessível"','"name": "SL-Mix Teste"').replace('"short_name": "SL-Mix"','"short_name": "SL-Mix Teste"')
 open(bd+'/manifest.webmanifest','w',encoding='utf-8').write(mf)
-sw2=re.sub(r"const CACHE = '[^']*';","const CACHE = 'sl-mix-teste-v9';",sw)
+sw2=re.sub(r"const CACHE = '[^']*';","const CACHE = 'sl-mix-teste-v10';",sw)
 sw2=re.sub(r"\n  if \(url.indexOf\('/teste-'\)[^\n]*",'',sw2)
 open(bd+'/sw.js','w').write(sw2)

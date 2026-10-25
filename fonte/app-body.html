@@ -199,6 +199,8 @@ h1{font-size:1.3rem;margin:0}
 .menu-box{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
 .menu-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .menu-head h2{margin:0;font-size:1.3rem}
+#edLayer .menu-head h2,#fxLayer .menu-head h2{flex:1 1 100%}
+#edLayer .menu-head .btn,#fxLayer .menu-head .btn{flex:1 1 0}
 .menu-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .menu-body{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));align-items:start}
 .menu-body>*{min-width:0}
@@ -278,7 +280,7 @@ header .field label{font-size:.85rem}
 
   <div class="cols">
     <div class="colL" role="group" aria-label="Navegação">
-      <div class="field"><label for="goSel">Ir para</label><select id="goSel" data-nav></select></div>
+      <div class="field"><select id="goSel" data-nav aria-label="Ir para"></select></div>
     </div>
 
     <div class="colC">
@@ -359,6 +361,7 @@ header .field label{font-size:.85rem}
     <div class="menu-head">
       <h2 id="edTitle" tabindex="-1">Editar áudio</h2>
       <button type="button" class="btn" id="edPlay">Tocar</button>
+      <button type="button" class="btn" id="edStop" aria-label="Parar e voltar ao início">Parar</button>
       <button type="button" class="btn primary" id="edClose">Concluir</button>
     </div>
     <div id="edBody" class="menu-body" style="grid-template-columns:1fr"></div>
@@ -463,9 +466,10 @@ header .field label{font-size:.85rem}
 
     <h3>6. Editar o áudio de um canal</h3>
     <ol>
-      <li>No canal, ative “Editar áudio”. Abre uma tela só daquele canal. Em “Canal a editar” dá para trocar de canal sem sair. A tela tem o botão Tocar (ele fica no topo, ao lado de Concluir) e o botão “Concluir” fecha a tela. As mudanças já ficam valendo.</li>
-      <li>Escreva o tempo do início em “Início da seleção” e o do fim em “Fim da seleção”, por exemplo 12.3 ou 1:05. Ou use “Início: voltar”, “Início: avançar”, “Fim: voltar” e “Fim: avançar”, que andam o tamanho do “Passo” escolhido. Você pode também tocar, pausar no ponto e usar, dentro de “Marcar pelo cursor e mais edições”, “Marcar início aqui” e “Marcar fim aqui”.</li>
-      <li>“Ouvir trecho” confere. Depois use Cortar, Copiar ou Colar no cursor. Desfazer e Refazer ficam logo abaixo. Silenciar, manter só a seleção e ajustar ao silêncio estão em “Marcar pelo cursor e mais edições”.</li>
+      <li>No canal, ative “Editar áudio”. Abre uma tela só daquele canal. Em “Canal a editar” dá para trocar de canal sem sair. No topo ficam Tocar (que vira Pausar), Parar e Concluir. Parar volta ao início, e Concluir fecha a tela. As mudanças já ficam valendo.</li>
+      <li>Para marcar ouvindo: ative Tocar, pause onde o trecho começa e ative “Marcar início aqui”. Ative Tocar de novo, pause onde ele termina e ative “Marcar fim aqui”. O Tocar continua de onde parou. Se passar do ponto, use “Voltar” e “Avançar”, que andam o tamanho do “Passo” escolhido, e marque outra vez. O leitor fala o ponto marcado e a duração.</li>
+      <li>Também dá para escrever o tempo do início em “Início” e o do fim em “Fim”, por exemplo 12.3 ou 1:05, ou usar “Início: voltar”, “Início: avançar”, “Fim: voltar” e “Fim: avançar” para acertar cada ponto.</li>
+      <li>“Ouvir trecho” confere. Depois use Cortar, Copiar ou Colar no cursor. Desfazer e Refazer ficam logo abaixo. Silenciar, manter só a seleção, ajustar ao silêncio e as seleções rápidas ficam mais abaixo, em “Mais edições”.</li>
       <li>“Excluir todo o áudio do canal” esvazia o canal (pede para apertar de novo), e dá para desfazer.</li>
     </ol>
     <h3>6b. Emendar e colocar locução sobre uma trilha</h3>
@@ -476,7 +480,7 @@ header .field label{font-size:.85rem}
     </ol>
     <h3>6c. Separar um áudio em várias faixas (músicas)</h3>
     <ol>
-      <li>Abra “Editar áudio” do canal e, dentro dele, “Separar em faixas”.</li>
+      <li>Abra “Editar áudio” do canal e desça até “Separar em faixas”, na mesma tela.</li>
       <li>Toque o áudio com o botão Tocar. Quando chegar ao fim de uma música, ative “Marcar divisão aqui”. “Voltar 5 s” e “Avançar 5 s” ajudam a achar o ponto. Se tocar enquanto marca, o app desconta o tempo de reação ajustado em “Compensação ao marcar tocando”.</li>
       <li>Em “Divisões”, escolha uma e use “Ouvir antes e depois da divisão”. Se precisar, use “Divisão: voltar” e “Divisão: avançar”, “Ajustar divisão ao silêncio” ou “Remover divisão”.</li>
       <li>Para achar as divisões sozinho nos silêncios, escreva o tempo mínimo e ative “Achar divisões por silêncio”. Depois confira cada uma.</li>
@@ -509,7 +513,7 @@ header .field label{font-size:.85rem}
     </ul>
 
     <h3>Novidades</h3>
-    <p>Versão 1.1 (teste): tela mais limpa, sem o título Canais; botão FX em cada canal, com os presets e a lista de pré-amplificador, equalizador, delay, chorus, reverb de voz e afinação de voz, todos opcionais; reverb de voz com envio por canal; nome do canal à sua escolha, por exemplo Violão e Voz; mesa que abre vazia, com Adicionar canal e Remover canal; menu Projetos reorganizado, com Novo projeto; botão Editar áudio em cada canal, com tela própria; Inserir arquivo no cursor e Colocar arquivo a partir do cursor, para emendar e para locução sobre trilha; Separar em faixas, com divisões marcadas ouvindo e arquivo ZIP.</p>
+    <p>Versão 1.1 (teste): tela Editar áudio reorganizada, com Tocar, Parar, Marcar início, Marcar fim, Voltar e Avançar logo no começo e sem grupos fechados; tela mais limpa, sem os títulos Canais e Ir para; botão FX em cada canal, com os presets e a lista de pré-amplificador, equalizador, delay, chorus, reverb de voz e afinação de voz, todos opcionais; reverb de voz com envio por canal; nome do canal à sua escolha, por exemplo Violão e Voz; mesa que abre vazia, com Adicionar canal e Remover canal; menu Projetos reorganizado, com Novo projeto; botão Editar áudio em cada canal, com tela própria; Inserir arquivo no cursor e Colocar arquivo a partir do cursor, para emendar e para locução sobre trilha; Separar em faixas, com divisões marcadas ouvindo e arquivo ZIP.</p>
     <p>Versão 1.0: primeira versão publicada, com seis canais e Master, gravação em um ou vários canais, efeitos e presets por canal, edição, afinação de voz, reverb de voz, projetos e exportação em WAV e MP3.</p>
     <p class="hint">SL-Mix: Áudio Acessível. Versão 1.1. © 2026 Gutenberg Guerra Lima. Todos os direitos reservados.</p>
     <p><button type="button" class="btn primary" id="helpClose2">Fechar instruções</button></p>
@@ -2016,11 +2020,9 @@ for(let i=0;i<N;i++)grid.append(buildChannel(i));
     sel[which]=t;seek(t-pos(),true);
     afterMark((which==='a'?'Início':'Fim')+' em '+spokenPos(t)+'.');
   }
-  const more=h('details',{class:'fx'},h('summary',{text:'Marcar pelo cursor e mais edições'}),
-    h('div',{class:'pcol'},
+  const more=h('div',{class:'pcol'},h('h3',{text:'Mais edições'}),
       posW,
       h('div',{class:'row'},btn('Ir ao início',()=>goTo(0)),btn('Ir ao fim',()=>goTo(dur()))),
-      h('div',{class:'row'},btn('Marcar início aqui',markStart,'btn primary'),btn('Marcar fim aqui',markEnd,'btn primary')),
       reactS.wrap,
       btn('Selecionar o áudio todo',()=>selTo(null,null,'Áudio todo selecionado.')),
       btn('Selecionar do cursor até o fim',()=>selTo(pos(),null,'Selecionado do cursor até o fim.')),
@@ -2032,7 +2034,7 @@ for(let i=0;i<N;i++)grid.append(buildChannel(i));
       h('div',{class:'row'},btn('Adiantar 10 ms',()=>doShift(-10)),btn('Atrasar 10 ms',()=>doShift(10))),
       h('div',{class:'row'},
         btn('Dizer seleção',()=>say(selSpoken()),'btn quiet'),
-        btn('Limpar seleção',()=>{setSel(null,null);say('Seleção limpa')},'btn quiet'))));
+        btn('Limpar seleção',()=>{setSel(null,null);say('Seleção limpa')},'btn quiet')));
 
   const safeName=n=>String(n||'parte').replace(/[\\/:*?"<>|]/g,'_').trim()||'parte';
   const numField=(id,label,val,min,max,step)=>{
@@ -2131,8 +2133,7 @@ for(let i=0;i<N;i++)grid.append(buildChannel(i));
       }catch(e){say('Não foi possível salvar as faixas. O áudio pode ser grande demais para este aparelho.')}
     },30);
   }
-  const splitD=h('details',{class:'fx'},h('summary',{text:'Separar em faixas'}),
-    h('div',{class:'pcol'},
+  const splitD=h('div',{class:'pcol'},h('h3',{text:'Separar em faixas'}),
       h('div',{class:'row'},btn('Voltar 5 s',()=>seek(-5)),btn('Avançar 5 s',()=>seek(5))),
       btn('Marcar divisão aqui',markCut,'btn primary'),
       cutW,
@@ -2143,16 +2144,18 @@ for(let i=0;i<N;i++)grid.append(buildChannel(i));
       silW,
       btn('Achar divisões por silêncio',cutAuto),
       btn('Salvar faixas em ZIP',cutSave,'btn primary'),
-      btn('Apagar todas as divisões',cutClear,'btn quiet')));
+      btn('Apagar todas as divisões',cutClear,'btn quiet'));
   cutRender(0);
 
   const main=h('div',{class:'pcol'},
     edSelW,
+    h('div',{class:'row'},btn('Marcar início aqui',markStart,'btn primary'),btn('Marcar fim aqui',markEnd,'btn primary')),
+    h('div',{class:'row'},btn('Voltar',()=>seek(-stepSec()),'btn',{'aria-label':'Voltar um passo'}),btn('Avançar',()=>seek(stepSec()),'btn',{'aria-label':'Avançar um passo'})),
+    stepW,
     wA,
     h('div',{class:'row'},btn('Início: voltar',()=>nudge('a',-1),'btn',{'aria-label':'Início: voltar um passo'}),btn('Início: avançar',()=>nudge('a',1),'btn',{'aria-label':'Início: avançar um passo'})),
     wB,
     h('div',{class:'row'},btn('Fim: voltar',()=>nudge('b',-1),'btn',{'aria-label':'Fim: voltar um passo'}),btn('Fim: avançar',()=>nudge('b',1),'btn',{'aria-label':'Fim: avançar um passo'})),
-    stepW,
     btn('Ouvir trecho',()=>{if(needSel())playRange(sel.a,sel.b,sel.a,'Tocando o trecho')}),
     h('div',{class:'row'},btn('Cortar',doCut,'btn primary'),btn('Copiar',doCopy),btn('Colar no cursor',doPaste)),
     h('div',{class:'row'},
@@ -2165,7 +2168,7 @@ for(let i=0;i<N;i++)grid.append(buildChannel(i));
       if(!confirmTwice('edrm'+c.i,'Apagar todo o áudio '+c.de+'? Aperte de novo para confirmar. Dá para desfazer.'))return;
       clearChannel(c);setSel(null,null);
     },'btn quiet'),
-    splitD,more);
+    more,splitD);
 
   sec.append(main,fileIn);
   /* o rótulo visível fica escondido do leitor: o nome completo é falado só dentro do campo */
@@ -2788,6 +2791,7 @@ function closeEd(){
 }
 $('edClose').addEventListener('click',()=>closeEd());
 $('edPlay').addEventListener('click',()=>btnPlay.click());
+$('edStop').addEventListener('click',()=>stopAll());
 new MutationObserver(()=>{$('edPlay').textContent=btnPlay.textContent}).observe(btnPlay,{childList:true,characterData:true,subtree:true});
 /* tela de efeitos de um canal (rack) */
 let fxOpen=false,fxOpener=null,fxCh=0;
