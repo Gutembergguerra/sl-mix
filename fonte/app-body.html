@@ -148,7 +148,7 @@ details.fx>div{display:flex;flex-direction:column;gap:10px;padding:4px 0 12px}
 .grid.view-compacto{grid-template-columns:1fr;gap:8px}
 .grid.view-compacto .card{flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:10px 12px}
 .grid.view-compacto .card h3{min-width:112px}
-.grid.view-compacto .filerow,.grid.view-compacto .ctl-pan,.grid.view-compacto details.fx{display:none}
+.grid.view-compacto .filerow,.grid.view-compacto .ctl-pan,.grid.view-compacto details.fx,.grid.view-compacto .rack-btn{display:none}
 .grid.view-compacto .ctl-vol{flex:1 1 260px}
 .grid.view-compacto .pair{grid-template-columns:auto auto}
 .grid.view-compacto .more-btn{display:inline-flex;align-items:center}
@@ -167,7 +167,7 @@ details.fx>div{display:flex;flex-direction:column;gap:10px;padding:4px 0 12px}
 .grid.view-faixas{grid-template-columns:1fr;gap:8px}
 .grid.view-faixas .tbar{display:flex;flex-wrap:wrap;gap:6px}
 .tbar .btn{min-height:44px;padding:0 10px}
-.grid.view-faixas .card>.filerow,.grid.view-faixas .card>.ctl,.grid.view-faixas .card>details.fx,.grid.view-faixas .card>.pair,.grid.view-faixas .card>.more-btn,.grid.view-faixas .card>.ed-btn{display:none}
+.grid.view-faixas .card>.filerow,.grid.view-faixas .card>.ctl,.grid.view-faixas .card>details.fx,.grid.view-faixas .card>.rack-btn,.grid.view-faixas .card>.pair,.grid.view-faixas .card>.more-btn,.grid.view-faixas .card>.ed-btn{display:none}
 .grid.view-faixas .card>.pane-show{display:flex!important;flex-direction:column}
 .grid.view-faixas .card>details.pane-show{display:block!important}
 .grid.view-faixas .card>details.pane-show>summary{display:none}
@@ -202,7 +202,7 @@ h1{font-size:1.3rem;margin:0}
 .sum{color:var(--muted);font-size:.9rem;overflow-wrap:anywhere;margin:0}
 .grid.view-lista .sum,.grid.view-lado .sum,.grid.view-um .sum{display:none}
 .grid.view-mesa .more-btn{display:inline-flex;align-items:center;justify-content:center}
-.grid.view-mesa details.fx{display:none}
+.grid.view-mesa details.fx,.grid.view-mesa .rack-btn{display:none}
 .grid.view-compacto .sum{flex:1 1 100%;order:9}
 .menu-layer{position:fixed;inset:0;z-index:50;background:var(--bg);overflow-y:auto;padding:max(12px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px))}
 .menu-box{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
@@ -322,7 +322,7 @@ header .field label{font-size:.85rem}
             <li><kbd>M</kbd> e <kbd>S</kbd> ligam mudo e solo do canal onde o foco está.</li>
             <li><kbd>X</kbd> marca o próximo ponto da seleção: primeiro o início, depois o fim.</li>
             <li><kbd>Esc</kbd> fecha o menu do canal.</li>
-            <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> desfaz e <kbd>Ctrl</kbd>+<kbd>Y</kbd> refaz a edição do canal escolhido na seção Edição.</li>
+            <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> desfaz e <kbd>Ctrl</kbd>+<kbd>Y</kbd> refaz a edição do canal escolhido em Editar áudio.</li>
             <li>Em qualquer campo deslizante, as setas ajustam o valor.</li>
           </ul>
         </details>
@@ -331,8 +331,6 @@ header .field label{font-size:.85rem}
       <section class="panel" id="recSec" aria-labelledby="h-rec"></section>
       <section class="panel" id="metSec" aria-labelledby="h-met"></section>
       <section class="panel" id="edSec" aria-label="Editar áudio" hidden></section>
-      <section class="panel" id="tuSec" aria-labelledby="h-tu"></section>
-      <section class="panel" id="vrSec" aria-labelledby="h-vr"></section>
       <section class="master" id="masterSec" aria-labelledby="h-master"></section>
     </div>
   </div>
@@ -377,6 +375,18 @@ header .field label{font-size:.85rem}
   </div>
 </div>
 
+<div id="fxLayer" class="menu-layer" role="dialog" aria-modal="true" aria-labelledby="fxTitle" hidden>
+  <div class="menu-box proj-box">
+    <div class="menu-head">
+      <h2 id="fxTitle" tabindex="-1">Efeitos</h2>
+      <button type="button" class="btn" id="fxPlay">Tocar</button>
+      <button type="button" class="btn primary" id="fxClose">Concluir</button>
+    </div>
+    <div id="fxBody" class="menu-body" style="grid-template-columns:1fr"></div>
+  </div>
+</div>
+<div id="fxStash" hidden></div>
+
 <div id="helpLayer" class="menu-layer" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
   <div class="menu-box help-box">
     <div class="menu-head">
@@ -402,7 +412,7 @@ header .field label{font-size:.85rem}
     <p class="hint">Dica para leitor de tela: use a navegação por títulos (NVDA: tecla H; TalkBack: Títulos nos controles de leitura) para pular entre os assuntos.</p>
 
     <h3>1. Como o aplicativo é organizado</h3>
-    <p>No topo ficam o título, o botão “Projetos e arquivos”, a lista “Visualização dos canais” e o botão “Instruções”. Logo abaixo fica o player, que está sempre à vista e tem Tocar, Gravar, Parar, Voltar 5 s e Avançar 5 s. Abaixo do player fica a lista “Ir para”, depois os seis canais e, por último, as seções que abrem e fecham: Gravação, Metrônomo, Edição, Afinação de voz, Reverb de voz e Master. Abrir uma seção fecha as outras. Em celular deitado, a lista Ir para fica à esquerda, os canais no meio e as seções à direita.</p>
+    <p>No topo ficam o título, o botão “Projetos e arquivos”, a lista “Visualização dos canais” e o botão “Instruções”. Logo abaixo fica o player, que está sempre à vista e tem Tocar, Gravar, Parar, Voltar 5 s e Avançar 5 s. Abaixo do player fica a lista “Ir para”, depois os seis canais e, por último, as seções que abrem e fecham: Gravação, Metrônomo, Edição e Master. Abrir uma seção fecha as outras. Em celular deitado, a lista Ir para fica à esquerda, os canais no meio e as seções à direita.</p>
     <p>A lista “Ir para” leva direto a um canal ou a uma seção. A lista “Visualização dos canais” muda como os canais aparecem. Compacto mostra só volume, mudo, solo, armar e o botão Ajustes e efeitos. Faixas mostra uma linha de botões por canal. Lista mostra tudo de cada canal. Lado a lado põe os canais lado a lado, para passar com o dedo. Um canal por vez mostra só um. Mesa vertical deixa os volumes como faders em pé.</p>
 
     <h3>1b. Adicionar e remover canais</h3>
@@ -426,7 +436,8 @@ header .field label{font-size:.85rem}
     <h3>4. Mexer nos efeitos de um canal</h3>
     <ol>
       <li>No canal desejado, ative “Ajustes e efeitos”, ou toque duas vezes ou segure em uma parte livre do cartão do canal. Abre uma tela só daquele canal, e o leitor anuncia o nome do canal.</li>
-      <li>Ali ficam Pré-amplificador (ganho e calor), Equalizador (graves, médios e agudos), Delay e Chorus. Abra o grupo que quiser e ajuste. Delay e Chorus têm um botão de ligar.</li>
+      <li>Ali ficam o nome do canal, Carregar áudio, Pan, o botão “Efeitos”, presets, ouvir sem efeitos, copiar e restaurar efeitos.</li>
+      <li>O botão “Efeitos”, que existe em cada canal, abre a tela de efeitos daquele canal, com uma lista fechada: Pré-amplificador (ganho e calor), Equalizador (graves, médios e agudos), Delay, Chorus, Reverb de voz e Afinação de voz. Abra só o que quiser usar: todos são opcionais, e cada canal tem os seus ajustes. Delay e Chorus têm um botão de ligar. Em Reverb de voz, “Envio ao reverb” diz quanto daquele canal vai para o reverb: zero é desligado, e cada canal tem o seu valor. Os outros ajustes do reverb valem para todos os canais. Para voltar, ative Concluir.</li>
       <li>Tudo o que você muda ali vale só para aquele canal.</li>
       <li>Use “Tocar” dentro da tela para ouvir enquanto ajusta.</li>
       <li>“Ouvir sem efeitos” compara com o original sem apagar seus ajustes.</li>
@@ -443,12 +454,12 @@ header .field label{font-size:.85rem}
       <li>Armar, Mudo e Solo ligam e desligam na hora com Enter ou Espaço.</li>
       <li>Volume, Pan e Áudio abrem as opções daquele item logo abaixo da linha, e o foco vai para elas. Ative o mesmo botão de novo, ou aperte Esc, para voltar à linha. Só um item fica aberto por vez.</li>
       <li>Presets abre uma lista fechada, com ajustes prontos de efeitos para voz (com eco ou chorus também), violão, guitarra, bateria, baixo, teclado e música completa. Escolha um e ele é aplicado só àquele canal.</li>
-      <li>Efeitos abre uma lista de escolha com Pré-amplificador, Equalizador, Delay, Chorus e Reverb. Escolha um e as opções dele aparecem logo abaixo; Esc volta para a lista. Reverb escolhe este canal como o canal da voz e leva à seção Reverb de voz.</li>
+      <li>Efeitos abre a tela de efeitos do canal, com a lista fechada de Pré-amplificador, Equalizador, Delay, Chorus, Reverb de voz e Afinação de voz. Para voltar, ative Concluir.</li>
       <li>“Mais” abre a tela com presets, copiar efeitos e restaurar. “Áudio” tem carregar e remover áudio do canal.</li>
       <li>No celular, essa visualização também funciona: os botões quebram em mais de uma linha e o TalkBack passa por eles deslizando.</li>
     </ul>
 
-    <p>O gesto de voltar do Android fecha só a tela que estiver aberta, como Ajustes e efeitos, Projetos e arquivos, Instruções ou as opções de um item da faixa, sem sair do aplicativo.</p>
+    <p>O gesto de voltar do Android fecha só a tela que estiver aberta, como Ajustes e efeitos, Efeitos, Projetos e arquivos, Instruções ou as opções de um item da faixa, sem sair do aplicativo.</p>
 
     <h3>5. Gravar em um canal</h3>
     <ol>
@@ -484,10 +495,10 @@ header .field label{font-size:.85rem}
     </ol>
 
     <h3>7. Afinação de voz</h3>
-    <p>Na seção Afinação de voz, escolha o canal da voz, a escala, o tom, a velocidade e o trecho, e ative “Afinar a voz”. Ela não diz as notas. Funciona melhor com uma voz sozinha. Ouça o resultado e use Desfazer na seção Edição se não gostar.</p>
+    <p>Em um canal, ative “Efeitos” e abra “Afinação de voz”. Ative “Afinar a voz”, ou antes ajuste a intensidade, o trecho, a escala, o tom e a velocidade. Ela corrige as notas da voz daquele canal para a nota certa mais próxima e não diz as notas. Funciona melhor com uma voz sozinha, sem eco. Ouça o resultado e use Desfazer em “Editar áudio” se não gostar.</p>
 
     <h3>8. Reverb de voz</h3>
-    <p>Na seção Reverb de voz, escolha o canal da voz, ligue “Reverb de voz ligado” e ajuste o nível. A cadeia tem eco curto, filtros, compressor que abaixa o efeito quando a voz canta, e reverb de salão.</p>
+    <p>Em um canal, ative “Efeitos” e abra “Reverb de voz”. Ajuste “Envio ao reverb”: quanto mais alto, mais daquele canal vai para o reverb, e zero desliga. Assim um canal pode ter um pouco, outro um pouco mais, e outro nenhum. O nível do efeito, o tipo de reverb e os quatro módulos opcionais, em listas fechadas (eco curto, filtros, compressor que abaixa o efeito quando a voz canta, e reverb de salão), valem para todos os canais. Projetos antigos que usavam o reverb em um canal passam a ter envio 100 nesse canal.</p>
 
     <h3>9. Master</h3>
     <p>O Master é a saída final: volume, equalizador, compressor com opções prontas, reverb leve e limitador. “Ouvir sem processamento” compara com e sem o Master. “Dizer nível do Master” fala o nível de saída.</p>
@@ -505,11 +516,11 @@ header .field label{font-size:.85rem}
     <ul>
       <li>Espaço toca e pausa. Números de 1 a 6 vão ao canal.</li>
       <li>M e S ligam mudo e solo do canal em foco. X marca ponto de seleção.</li>
-      <li>Esc fecha o menu do canal, Editar áudio, Projetos e arquivos, ou estas instruções.</li>
+      <li>Esc fecha o menu do canal, Efeitos, Editar áudio, Projetos e arquivos, ou estas instruções.</li>
     </ul>
 
     <h3>Novidades</h3>
-    <p>Versão 1.1 (teste): nome do canal à sua escolha, por exemplo Violão e Voz; mesa que abre vazia, com Adicionar canal e Remover canal; menu Projetos reorganizado, com Novo projeto; botão Editar áudio em cada canal, com tela própria; Inserir arquivo no cursor e Colocar arquivo a partir do cursor, para emendar e para locução sobre trilha; Separar em faixas, com divisões marcadas ouvindo e arquivo ZIP.</p>
+    <p>Versão 1.1 (teste): botão Efeitos em cada canal, com a lista de pré-amplificador, equalizador, delay, chorus, reverb de voz e afinação de voz, todos opcionais; reverb de voz com envio por canal; nome do canal à sua escolha, por exemplo Violão e Voz; mesa que abre vazia, com Adicionar canal e Remover canal; menu Projetos reorganizado, com Novo projeto; botão Editar áudio em cada canal, com tela própria; Inserir arquivo no cursor e Colocar arquivo a partir do cursor, para emendar e para locução sobre trilha; Separar em faixas, com divisões marcadas ouvindo e arquivo ZIP.</p>
     <p>Versão 1.0: primeira versão publicada, com seis canais e Master, gravação em um ou vários canais, efeitos e presets por canal, edição, afinação de voz, reverb de voz, projetos e exportação em WAV e MP3.</p>
     <p class="hint">SL-Mix: Áudio Acessível. Versão 1.1. © 2026 Gutenberg Guerra Lima. Todos os direitos reservados.</p>
     <p><button type="button" class="btn primary" id="helpClose2">Fechar instruções</button></p>
@@ -994,6 +1005,10 @@ function pvStop(){if(pv){try{pv.stop()}catch(e){}try{pv.disconnect()}catch(e){}p
 /* ---------- estado ---------- */
 const chans=[];
 const M={vol:0,low:0,mid:0,high:0,comp:'suave',revOn:false,revType:'sala',rev:15,ceil:-1,bypass:false};
+const VRDEF={snd:[0,0,0,0,0,0],lvl:40,slapT:40,slapFb:10,slapMix:15,sat:true,
+  hpf:470,hpq:.7,lpf:6000,lpq:.7,compOn:true,thr:-18,ratio:3,att:5,rel:180,
+  decay:2.8,pre:20,size:85,mix:100};
+const VR=Object.assign({},VRDEF);VR.snd=VRDEF.snd.slice();
 const COMP={
   off:{t:0,r:1,k:0,a:.003,rl:.25,mk:0},
   suave:{t:-18,r:2,k:20,a:.02,rl:.25,mk:2},
@@ -1379,7 +1394,7 @@ async function exportWav(fmt){
   say('Exportando a mixagem. Aguarde.');
   try{
     const sr=ctx.sampleRate;
-    const tail=(M.revOn?4.5:0)+(chans.some(c=>c.s.dOn)?2.5:0)+(VR.on?VR.decay*1.15+VR.pre/1000+.5:0)+.3;
+    const tail=(M.revOn?4.5:0)+(chans.some(c=>c.s.dOn)?2.5:0)+(VR.snd.some(x=>x>0)?VR.decay*1.15+VR.pre/1000+.5:0)+.3;
     const oc=new OfflineAudioContext(2,Math.ceil((dur()+tail)*sr),sr);
     const gr=buildGraph(oc,false);
     chans.forEach(c=>applyCh(gr,oc,c,true));
@@ -1692,10 +1707,6 @@ function buildBar(c,panes,moreBtn){
     const b=btn(label,()=>selectFx(c,k),'btn fxsel',{'aria-pressed':'false','aria-label':c.who+', '+label.toLowerCase()});
     c.fxBtns[k]=b;fm.append(b);
   });
-  fm.append(btn('Reverb',()=>{
-    const v=SE['vrCh'];if(v){v.value=String(c.i);v.dispatchEvent(new Event('change'))}
-    goSection('vr');say(c.who+': escolhido como canal da voz. Ajuste o Reverb de voz aqui.');
-  },'btn fxsel',{'aria-label':c.who+', reverb de voz'}));
   c.panes.fx=fm;c.fxMenu=fm;
   c.tb.addEventListener('keydown',e=>barKey(c,e));
   const prp=h('div',{class:'prpane'},mkPresetField(c,'prp'+c.i));
@@ -1755,6 +1766,7 @@ function focusPane(c,k){
   if(f)f.focus();
 }
 function togglePane(c,k){
+  if(k==='fx'){openRack(c.i,c.openers.fx);return}
   const label=BAR.find(x=>x[0]===k)[1];
   if(paneOpener(c.pane)===k){showPane(c,null);say(c.who+', '+label+', fechado.');return}
   showPane(c,k);
@@ -1922,12 +1934,22 @@ function buildChannel(i){
   c.nameInp=c.nameW.inp;c.nameInp.maxLength=30;c.nameInp.setAttribute('enterkeyhint','done');
   c.nameInp.setAttribute('aria-label',who+', nome do canal. Escreva o nome que quiser');
   c.nameW.hidden=true;
+  const vsl=slider({id:'vs'+p,who:who+', reverb de voz',label:'Envio ao reverb',min:0,max:100,step:5,btn:5,value:0,
+    spoken:v=>v===0?'desligado':v+' por cento',short:vPct,onChange:v=>{VR.snd[i]=v;lvVR();fxStates()}});
+  c.vrInner=h('div',{},vsl.wrap);
+  c.vrSum=h('summary',{'aria-label':who+', reverb de voz, desligado',text:'Reverb de voz'});
+  c.vrBox=h('details',{class:'fx'},c.vrSum,c.vrInner);
+  c.tuInner=h('div',{});
+  c.tuBox=h('details',{class:'fx'},h('summary',{'aria-label':who+', afinação de voz',text:'Afinação de voz'}),c.tuInner);
+  c.rackNodes=[preBox,eqBox,dBox,cBox,c.vrBox,c.tuBox];
+  c.rackStore=h('div',{hidden:true},...c.rackNodes);
+  c.rackBtn=btn('Efeitos',()=>openRack(c.i,c.rackBtn),'btn rack-btn',{'aria-label':who+', efeitos','aria-haspopup':'dialog','aria-expanded':'false'});
   c.sec=h('section',{class:'card','aria-labelledby':'h'+p,'data-ch':i},
     c.title,c.sumEl,c.nameW,
     filerow,
-    vol.wrap,pan.wrap,h('div',{class:'pair'},mute,solo,arm),more,edb,
-    preBox,eqBox,dBox,cBox,c.extra);
-  c.menuNodes=[c.nameW,filerow,pan.wrap,preBox,eqBox,dBox,cBox,c.extra];
+    vol.wrap,pan.wrap,h('div',{class:'pair'},mute,solo,arm),more,edb,c.rackBtn,
+    c.rackStore,c.extra);
+  c.menuNodes=[c.nameW,filerow,pan.wrap,c.rackBtn,c.extra];
   c.pairEl=c.sec.querySelector('.pair');c.sec.hidden=true;
   buildBar(c,{vol:vol.wrap,pan:pan.wrap,pre:preBox,eq:eqBox,dly:dBox,cho:cBox,file:filerow},more);
   c.sec.addEventListener('dblclick',e=>{if(e.target.closest('input,button,select,summary,a'))return;openMenu(c.i,more)});
@@ -2237,10 +2259,6 @@ for(let i=0;i<N;i++)grid.append(buildChannel(i));
 })();
 
 /* ---------- reverb de voz: cadeia de 4 módulos ---------- */
-const VRDEF={on:false,ch:0,lvl:40,slapT:40,slapFb:10,slapMix:15,sat:true,
-  hpf:470,hpq:.7,lpf:6000,lpq:.7,compOn:true,thr:-18,ratio:3,att:5,rel:180,
-  decay:2.8,pre:20,size:85,mix:100};
-const VR=Object.assign({},VRDEF);
 function setHallIR(v,C){
   const d=hallIRData(C.sampleRate,VR.decay,VR.size),b=C.createBuffer(2,d[0].length,C.sampleRate);
   b.copyToChannel(d[0],0);b.copyToChannel(d[1],1);
@@ -2273,8 +2291,8 @@ function buildVR(C,gr){
 }
 function applyVR(gr,C,imm){
   const v=gr.vr,s=VR;
-  v.sends.forEach((g,i)=>setP(C,g.gain,s.on&&i===s.ch?1:0,imm));
-  v.keys.forEach((g,i)=>setP(C,g.gain,s.on&&i===s.ch?1:0,imm));
+  v.sends.forEach((g,i)=>setP(C,g.gain,(s.snd[i]||0)/100,imm));
+  v.keys.forEach((g,i)=>setP(C,g.gain,(s.snd[i]||0)>0?1:0,imm));
   setP(C,v.slapD.delayTime,s.slapT/1000,imm);
   setP(C,v.slapFb.gain,s.slapFb/100,imm);
   setP(C,v.slapW.gain,s.slapMix/100,imm);setP(C,v.slapDry.gain,1-s.slapMix/100,imm);
@@ -2309,19 +2327,14 @@ async function installDucker(gr,C){
     return true;
   }catch(e){return false}
 }
-const lvVR=()=>{if(live)applyVR(live,ctx,false)};
+function lvVR(){if(live)applyVR(live,ctx,false)}
 const sKhz=v=>v>=1000?(Math.round(v/10)/100).toString().replace('.',',')+' quilohertz':v+' hertz';
 const vKhz=v=>v>=1000?(Math.round(v/100)/10).toFixed(1).replace('.',',')+' kHz':v+' Hz';
+let vrShared=null,tuShared=null;
 (function(){
-  const sec=$('vrSec'),W='Reverb de voz';
-  sec.append(h('h2',{id:'h-vr',tabindex:'-1',text:'Reverb de voz'}));
-  sec.append(h('p',{class:'hint',text:'Cadeia pronta para voz, com quatro módulos em sequência: slapback, filtros, compressor que abaixa o efeito quando a voz canta, e reverb de salão. Escolha o canal da voz, ligue e ajuste o nível do efeito. O ajuste de cada módulo é opcional.'}));
+  const sec=h('div',{id:'vrShared',class:'pcol'}),W='Reverb de voz';vrShared=sec;$('fxStash').append(sec);
+  const mod=(t,...k)=>h('details',{class:'fx'},h('summary',{text:t}),h('div',{},...k));
   const S=(id,label,who,min,max,step,btnS,key,spoken,short)=>slider({id,who,label,min,max,step,btn:btnS,value:VRDEF[key],spoken,short,onChange:v=>{VR[key]=v;lvVR()}});
-  const onBtn=btn('Reverb de voz ligado',()=>{
-    VR.on=!VR.on;onBtn.setAttribute('aria-pressed',String(VR.on));lvVR();
-    say(VR.on?'Reverb de voz ligado no Canal '+(VR.ch+1):'Reverb de voz desligado');
-  },'btn primary',{id:'vron','aria-pressed':'false','aria-label':'Reverb de voz, ligado'});
-  const chSel=selectField('vrCh','Canal da voz, que também controla a compressão',chOpts(),'0',(v,t)=>{VR.ch=+v;lvVR();say('Reverb de voz no '+t)});regChSel(chSel.sel);
   const lvl=S('vrLvl','Nível do efeito',W,0,100,5,5,'lvl',sPct,vPct);
   const reset=btn('Restaurar os valores do preset',()=>{
     quiet=true;
@@ -2335,16 +2348,15 @@ const vKhz=v=>v>=1000?(Math.round(v/100)/10).toFixed(1).replace('.',',')+' kHz':
     }finally{quiet=false}
     lvVR();say('Valores do preset restaurados.');
   },'btn quiet');
-  sec.append(h('div',{class:'pgrid'},h('div',{class:'pcol'},onBtn,chSel),h('div',{class:'pcol'},lvl.wrap,reset)));
 
   const satBtn=btn('Saturação vintage ligada',()=>{
     VR.sat=!VR.sat;satBtn.setAttribute('aria-pressed',String(VR.sat));lvVR();say(VR.sat?'Saturação vintage ligada':'Saturação vintage desligada');
   },'btn',{id:'vrsat','aria-pressed':'true','aria-label':'Slapback, saturação vintage ligada'});
-  const m1=h('div',{class:'pcol'},h('h3',{text:'1. Slapback analógico'}),
+  const m1=mod('1. Slapback analógico',
     S('vrSlapT','Tempo',W+', slapback',10,250,5,5,'slapT',sMs,vMs).wrap,
     S('vrSlapFb','Repetições',W+', slapback',0,60,5,5,'slapFb',sPct,vPct).wrap,
     S('vrSlapMix','Mistura',W+', slapback',0,100,5,5,'slapMix',sPct,vPct).wrap,satBtn);
-  const m2=h('div',{class:'pcol'},h('h3',{text:'2. Filtros de graves e agudos'}),
+  const m2=mod('2. Filtros de graves e agudos',
     S('vrHpf','Corta graves abaixo de',W+', filtros',20,1000,10,10,'hpf',sKhz,vKhz).wrap,
     S('vrHpq','Inclinação dos graves',W+', filtros',.5,2,.1,.1,'hpq',v=>num(v),v=>num(v)).wrap,
     S('vrLpf','Corta agudos acima de',W+', filtros',1000,16000,100,500,'lpf',sKhz,vKhz).wrap,
@@ -2352,7 +2364,7 @@ const vKhz=v=>v>=1000?(Math.round(v/100)/10).toFixed(1).replace('.',',')+' kHz':
   const compBtn=btn('Compressão pelo canal da voz ligada',()=>{
     VR.compOn=!VR.compOn;compBtn.setAttribute('aria-pressed',String(VR.compOn));lvVR();say(VR.compOn?'Compressão ligada':'Compressão desligada');
   },'btn',{id:'vrcomp','aria-pressed':'true','aria-label':'Reverb de voz, compressão pelo canal da voz ligada'});
-  const m3=h('div',{class:'pcol'},h('h3',{text:'3. Compressor com sidechain'}),compBtn,
+  const m3=mod('3. Compressor com sidechain',compBtn,
     S('vrThr','Limiar',W+', compressor',-40,0,1,1,'thr',v=>sDb(v),v=>vDb(v)).wrap,
     S('vrRatio','Razão',W+', compressor',1,10,.5,.5,'ratio',v=>num(v)+' para 1',v=>num(v)+':1').wrap,
     S('vrAtt','Ataque',W+', compressor',1,50,1,1,'att',sMs,vMs).wrap,
@@ -2364,12 +2376,12 @@ const vKhz=v=>v>=1000?(Math.round(v/100)/10).toFixed(1).replace('.',',')+' kHz':
     lvVR();say('Reverb: '+t);
   });
   const sSec=v=>num(v)+' segundos',vSec=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',')+' s';
-  const m4=h('div',{class:'pcol'},h('h3',{text:'4. Reverb de salão'}),preSel,
+  const m4=mod('4. Reverb de salão',preSel,
     S('vrDecay','Tempo de decaimento',W+', reverb',.3,6,.1,.1,'decay',sSec,vSec).wrap,
     S('vrPre','Pré-atraso',W+', reverb',0,200,5,5,'pre',sMs,vMs).wrap,
     S('vrSize','Tamanho',W+', reverb',10,100,5,5,'size',sPct,vPct).wrap,
     S('vrMix','Mistura com o sinal seco da cadeia',W+', reverb',0,100,5,5,'mix',sPct,vPct).wrap);
-  sec.append(h('div',{class:'pgrid'},m1,m2,m3,m4));
+  sec.append(lvl.wrap,m1,m2,m3,m4,reset);
 })();
 
 /* ---------- afinação de voz ---------- */
@@ -2410,25 +2422,21 @@ async function doTune(){
     const nd=pBlend(dataOf(b),r.out,i0,sr);
     commit(c,bufFromData(nd,sr),'afinação de voz'+(i0>0||i1<b.length?' na seleção':''));
     const pct=Math.round(r.plan.voiced/Math.max(1,r.plan.total)*100);
-    say('Afinação aplicada '+c.no+'. Encontrei voz em '+pct+' por cento do trecho. Correção média de '+Math.round(r.plan.meanCents)+' centésimos de tom. Ouça o resultado. Para voltar ao original, use Desfazer na seção Edição.');
+    say('Afinação aplicada '+c.no+'. Encontrei voz em '+pct+' por cento do trecho. Correção média de '+Math.round(r.plan.meanCents)+' centésimos de tom. Ouça o resultado. Para voltar ao original, use Desfazer na tela Editar áudio.');
   }catch(e){
     say('Não foi possível afinar a voz.');
   }finally{tuning=false}
 }
 (function(){
-  const sec=$('tuSec'),who='Afinação';
-  sec.append(h('h2',{id:'h-tu',tabindex:'-1',text:'Afinação de voz'}));
-  sec.append(h('p',{class:'hint',text:'Corrige as notas da voz de uma pista para a nota certa mais próxima. Funciona melhor com uma voz sozinha, sem eco. Ouça o resultado e use Desfazer na seção Edição se não gostar.'}));
+  const sec=h('div',{id:'tuShared',class:'pcol'}),who='Afinação';tuShared=sec;$('fxStash').append(sec);
   const keys=[['0','Dó'],['1','Dó sustenido'],['2','Ré'],['3','Mi bemol'],['4','Mi'],['5','Fá'],['6','Fá sustenido'],['7','Sol'],['8','Lá bemol'],['9','Lá'],['10','Si bemol'],['11','Si']];
-  const ch=selectField('tuCh','Canal da voz',chOpts(),'0',(v,t)=>say('Afinando o '+t));regChSel(ch.sel);
+  const ch=selectField('tuCh','Canal da voz',chOpts(),'0',(v,t)=>say('Canal da afinação: '+t));regChSel(ch.sel);
   const scale=selectField('tuScale','Escala',[['cromatica','Cromática, todas as notas'],['maior','Escala maior'],['menor','Escala menor']],'cromatica',(v,t)=>say('Escala: '+t));
   const key=selectField('tuKey','Tom, para escala maior ou menor',keys,'0',(v,t)=>say('Tom: '+t));
   const speed=selectField('tuSpeed','Velocidade da correção',[['rapida','Rápida, mais afinada'],['media','Média'],['suave','Suave, mais natural']],'media',(v,t)=>say('Velocidade: '+t));
-  const range=selectField('tuRange','Trecho',[['all','Pista inteira'],['sel','Só a seleção marcada na seção Edição']],'all',(v,t)=>say('Trecho: '+t));
+  const range=selectField('tuRange','Trecho',[['all','Pista inteira'],['sel','Só a seleção marcada em Editar áudio']],'all',(v,t)=>say('Trecho: '+t));
   const inten=slider({id:'tuInt',who,label:'Intensidade',min:0,max:100,step:5,btn:5,value:80,spoken:sPct,short:vPct,onChange:()=>{}});
-  sec.append(h('div',{class:'pgrid'},
-    h('div',{class:'pcol'},ch,range,scale,key),
-    h('div',{class:'pcol'},inten.wrap,speed,btn('Afinar a voz',doTune,'btn primary'))));
+  sec.append(btn('Afinar a voz',doTune,'btn primary'),inten.wrap,range,scale,key,speed,h('div',{hidden:true},ch));
 })();
 
 /* ---------- exportar MP3 ---------- */
@@ -2515,6 +2523,10 @@ async function applyProject(meta,chs){
     });
     updateNames();
     Object.keys(meta.sliders||{}).forEach(id=>{if(SL[id])SL[id](meta.sliders[id],false)});
+    if(!Object.keys(meta.sliders||{}).some(k=>/^vsc\d$/.test(k))){
+      for(let q=0;q<N;q++)SL['vsc'+q](0,false);
+      if(meta.toggles&&meta.toggles.vron){const q=+((meta.selects||{}).vrCh)||0;if(SL['vsc'+q])SL['vsc'+q](100,false)}
+    }
     Object.keys(meta.selects||{}).forEach(id=>{
       const s=SE[id];
       if(s&&Array.from(s.options).some(o=>o.value===meta.selects[id])){s.value=meta.selects[id];s.dispatchEvent(new Event('change'))}
@@ -2669,8 +2681,8 @@ function makeAcc(sec,group){
   });
   accs.push(o);return o;
 }
-['recSec','metSec','tuSec','vrSec','masterSec'].forEach(id=>makeAcc($(id),'R'));
-const SECNAME={files:['fileSec','Arquivos e ajuda'],proj:['projSec','Projetos'],rec:['recSec','Gravação'],met:['metSec','Metrônomo'],ed:['edSec','Edição'],tu:['tuSec','Afinação de voz'],vr:['vrSec','Reverb de voz'],master:['masterSec','Master']};
+['recSec','metSec','masterSec'].forEach(id=>makeAcc($(id),'R'));
+const SECNAME={files:['fileSec','Arquivos e ajuda'],proj:['projSec','Projetos'],rec:['recSec','Gravação'],met:['metSec','Metrônomo'],ed:['edSec','Edição'],master:['masterSec','Master']};
 function goSection(id){
   if(menuOpen)closeMenu(true);
   if(id==='proj'||id==='files'){openProj();return}
@@ -2813,6 +2825,37 @@ function closeEd(){
 $('edClose').addEventListener('click',()=>closeEd());
 $('edPlay').addEventListener('click',()=>btnPlay.click());
 new MutationObserver(()=>{$('edPlay').textContent=btnPlay.textContent}).observe(btnPlay,{childList:true,characterData:true,subtree:true});
+/* tela de efeitos de um canal (rack) */
+let fxOpen=false,fxOpener=null,fxCh=0;
+const fxLayer=$('fxLayer'),fxTitle=$('fxTitle'),fxBody=$('fxBody'),fxStash=$('fxStash');
+function openRack(k,opener){
+  if(fxOpen||edOpen||k<0||k>=A)return;
+  const c=chans[k];
+  fxOpen=true;fxOpener=opener||null;fxCh=k;pushLayer('fx',()=>closeRack());
+  c.rackNodes.forEach(n=>{const ph=document.createComment('');n.before(ph);n._ph2=ph;n.open=false;fxBody.append(n)});
+  c.vrInner.append(vrShared);c.tuInner.append(tuShared);
+  const was=quiet;quiet=true;const t=SE['tuCh'];t.value=String(k);t.dispatchEvent(new Event('change'));quiet=was;
+  fxTitle.textContent='Efeitos, '+c.who;
+  fxLayer.hidden=false;menuLayer.inert=true;mainEl.inert=true;document.body.classList.add('menu-open');
+  if(fxOpener)fxOpener.setAttribute('aria-expanded','true');
+  fxLayer.scrollTop=0;fxTitle.focus();
+  say('Efeitos, '+c.who+'. Escolha o efeito que quer usar. Use Concluir quando terminar.');
+}
+function closeRack(){
+  if(!fxOpen)return;
+  dropLayer('fx');
+  const c=chans[fxCh];
+  fxStash.append(vrShared,tuShared);
+  c.rackNodes.forEach(n=>{if(n._ph2){n._ph2.replaceWith(n);n._ph2=null}});
+  fxOpen=false;fxLayer.hidden=true;menuLayer.inert=false;
+  if(!menuOpen){mainEl.inert=false;document.body.classList.remove('menu-open')}
+  if(fxOpener)fxOpener.setAttribute('aria-expanded','false');
+  const cand=fxOpener&&fxOpener.offsetParent!==null?fxOpener:null;
+  (cand||c.title).focus();say('Efeitos concluído. '+c.who+'.');
+}
+$('fxClose').addEventListener('click',()=>closeRack());
+$('fxPlay').addEventListener('click',()=>btnPlay.click());
+new MutationObserver(()=>{$('fxPlay').textContent=btnPlay.textContent}).observe(btnPlay,{childList:true,characterData:true,subtree:true});
 /* instruções */
 let helpOpen=false;
 const helpLayer=$('helpLayer');
@@ -2887,7 +2930,7 @@ function resetChannel(c){
     c.buffer=null;c.name='';c.edited=false;c.undo=[];c.redo=[];
     setChName(c,'',true);
     resetExtras(c);
-    SL['vc'+c.i](0,false);SL['pc'+c.i](0,false);
+    SL['vc'+c.i](0,false);SL['pc'+c.i](0,false);SL['vsc'+c.i](0,false);
     ['mu','so'].forEach(k=>{const b=TG[k+'c'+c.i];if(b&&b.getAttribute('aria-pressed')==='true')b.click()});
     setFx(c,Object.assign({},FXDEF,{dOn:false,cOn:false}));
     refreshLabel(c);
@@ -2920,12 +2963,20 @@ function refreshChannels(){
   Array.from(goSel.options).filter(o=>/^c\d$/.test(o.value)).forEach(o=>o.remove());
   const ref=goSel.querySelector('option[value="files"]');
   for(let q=0;q<A;q++)goSel.insertBefore(h('option',{value:'c'+q,text:chLabel(q)}),ref);
-  applyView();recLabel();
+  applyView();recLabel();fxStates();
   $('chInfo').textContent=A===0?'Mesa vazia.':A+(A===1?' canal':' canais')+' de '+N;
   $('btnAddCh').setAttribute('aria-label',A<N?'Adicionar canal. O próximo será o '+chans[A].who+'.':'Adicionar canal. Limite de '+N+' canais atingido.');
   $('btnRmCh').setAttribute('aria-label',A>0?'Remover canal. O último é o '+chans[A-1].who+'.':'Remover canal. Não há canais.');
 }
+function fxStates(){
+  chans.forEach(c=>{
+    if(!c.vrSum)return;
+    const v=VR.snd[c.i]||0;
+    c.vrSum.setAttribute('aria-label',c.who+', reverb de voz, '+(v>0?'envio '+v+' por cento':'desligado'));
+  });
+}
 function updateNames(){
+  fxStates();
   const num=o=>/^\d+$/.test(o.value);
   CHSEL.forEach(({el})=>Array.from(el.options).forEach(o=>{if(num(o))o.text=chLabel(+o.value)}));
   chans.forEach(c=>{if(c.cpSel)Array.from(c.cpSel.options).forEach(o=>{if(num(o))o.text=chLabel(+o.value)})});
@@ -2955,6 +3006,7 @@ function setChName(c,nm,silent){
   });
   if(menuOpen&&menuCh===c.i)menuTitle.textContent=c.who+', ajustes e efeitos';
   if(edOpen&&edSelW&&+edSelW.sel.value===c.i)$('edTitle').textContent='Editar áudio, '+c.who;
+  if(fxOpen&&fxCh===c.i)fxTitle.textContent='Efeitos, '+c.who;
   if(silent)return;
   updateNames();dirty=true;
   say(nm?'Nome do canal definido: '+nm+'.':'Nome removido. O canal voltou a ser '+c.who+'.');
@@ -2985,6 +3037,7 @@ $('btnRmCh').addEventListener('click',()=>{
 /* teclado */
 document.addEventListener('keydown',e=>{
   const t=e.target,tag=t.tagName;
+  if(e.key==='Escape'&&fxOpen){e.preventDefault();closeRack();return}
   if(e.key==='Escape'&&edOpen){e.preventDefault();closeEd();return}
   if(e.key==='Escape'&&projOpen){e.preventDefault();closeProj();return}
   if(e.key==='Escape'&&helpOpen){e.preventDefault();closeHelp();return}

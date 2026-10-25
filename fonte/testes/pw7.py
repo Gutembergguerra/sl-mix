@@ -15,7 +15,10 @@ async def main():
         # menu do canal (compacto) + voltar
         await pg.select_option('#viewSel','compacto')
         await pg.click('button[aria-label="Canal 1, ajustes e efeitos"]');await pg.wait_for_timeout(150)
+        await pg.click('#menuBody button[aria-label="Canal 1, efeitos"]');await pg.wait_for_timeout(150)
         await pg.click('details.fx:has(summary[aria-label="Canal 1, equalizador"]) summary')
+        await pg.go_back();await pg.wait_for_timeout(200)
+        ck('voltar fecha só a tela de Efeitos',not await pg.is_visible('#fxLayer') and await pg.is_visible('#menuLayer'))
         await pg.go_back();await pg.wait_for_timeout(200)
         ck('voltar fecha só o menu',not await pg.is_visible('#menuLayer') and pg.url==url)
         ck('foco volta ao botão',await pg.evaluate("document.activeElement.getAttribute('aria-label')")=='Canal 1, ajustes e efeitos')
