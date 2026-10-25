@@ -84,6 +84,7 @@ Pendente: o autor testar com TalkBack e NVDA; ajustes pedidos por ele; depois la
 - Feito na 1.1 (cache teste v12): na tela Editar áudio, o Tocar sempre começa no início marcado (se houver); Voltar/Avançar e Início/Fim: voltar/avançar dizem direção, tempo do passo e posição ("Voltou 1 segundo. Posição: ..."); a barra Posição ficou logo abaixo de Canal; o aviso "Master: sinal no limite" não cobre mais outras mensagens (espera 2,5 s depois de qualquer aviso).
 - Feito na 1.1 (cache teste v13): durante a gravação o app não fala "Master: sinal no limite" (incomodava quem canta); se o som chegar ao limite, avisa uma vez só ao concluir a gravação. Teste: pw_v17.py.
 - Feito na 1.1 (cache teste v14): os botões Voltar, Avançar, Início/Fim: voltar/avançar e Divisão: voltar/avançar falam o tempo do Passo no próprio nome ("Voltar 1 segundo"), e o nome muda quando se troca o Passo. O autor não quer "um passo" nos nomes.
+- PENDENTE (próxima missão, não programada): quando houver mais de um canal, o botão Remover canal deve perguntar qual canal remover (hoje remove sempre o último). Dúvidas a confirmar com o autor: ao remover um canal do meio, os canais seguintes sobem (o Canal 3 vira Canal 2, levando áudio, efeitos, nome e envio de reverb) ou fica um buraco? Como a pergunta deve aparecer (lista de escolha dentro de uma tela com Remover e Cancelar)? Continua pedindo confirmação se o canal tiver áudio.
 - Regra de trabalho: a cada mudança, já remover o que ficar sem uso no código.
 
 ## Código-fonte (pasta `fonte`)
