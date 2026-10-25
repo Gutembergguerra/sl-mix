@@ -390,6 +390,15 @@ header .field label{font-size:.85rem}
 </div>
 <div id="fxStash" hidden></div>
 
+<div id="rmLayer" class="menu-layer" role="dialog" aria-modal="true" aria-labelledby="rmTitle" hidden>
+  <div class="menu-box proj-box">
+    <div class="menu-head">
+      <h2 id="rmTitle" tabindex="-1">Remover canal</h2>
+    </div>
+    <div id="rmBody" class="menu-body" style="grid-template-columns:1fr"></div>
+  </div>
+</div>
+
 <div id="helpLayer" class="menu-layer" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
   <div class="menu-box help-box">
     <div class="menu-head">
@@ -419,7 +428,7 @@ header .field label{font-size:.85rem}
     <p>A lista “Ir para” leva direto a um canal ou a uma seção. A lista “Visualização dos canais” muda como os canais aparecem. Compacto mostra só volume, mudo, solo, armar e o botão Ajustes e efeitos. Faixas mostra uma linha de botões por canal. Lista mostra tudo de cada canal. Lado a lado põe os canais lado a lado, para passar com o dedo. Um canal por vez mostra só um. Mesa vertical deixa os volumes como faders em pé.</p>
 
     <h3>1b. Adicionar e remover canais</h3>
-    <p>A mesa abre sem canais. Logo abaixo da lista “Ir para”, ative “Adicionar canal” quantas vezes precisar, até 6. “Remover canal” tira o último canal; se ele tiver áudio, é preciso apertar de novo para confirmar. Os números dos canais seguem a ordem em que foram criados. Para dar um nome ao canal, como Violão ou Voz, ative “Ajustes e efeitos” do canal e escreva no campo “Nome do canal”. O leitor passa a falar esse nome nos botões, nas listas e nas mensagens, e o nome fica salvo no projeto. Para voltar a Canal e o número, apague o texto do campo.</p>
+    <p>A mesa abre sem canais. Logo abaixo da lista “Ir para”, ative “Adicionar canal” quantas vezes precisar, até 6. “Remover canal” pergunta qual canal tirar: escolha na lista (que mostra o nome e se tem áudio) e ative “Remover”, ou “Cancelar”. Se o canal tiver áudio, é preciso apertar “Remover” de novo para confirmar. Os canais de baixo sobem, levando tudo o que já foi editado: áudio, desfazer, volume, efeitos, nome e reverb. Com um canal só, o botão remove direto. Os números dos canais seguem a ordem em que foram criados. Para dar um nome ao canal, como Violão ou Voz, ative “Ajustes e efeitos” do canal e escreva no campo “Nome do canal”. O leitor passa a falar esse nome nos botões, nas listas e nas mensagens, e o nome fica salvo no projeto. Para voltar a Canal e o número, apague o texto do campo.</p>
 
     <h3>2. Carregar um arquivo de áudio</h3>
     <ol>
@@ -523,7 +532,7 @@ header .field label{font-size:.85rem}
     </ul>
 
     <h3>Novidades</h3>
-    <p>Versão 1.1 (teste): sem avisos de som alto durante a gravação; tela Editar áudio reorganizada, com Tocar, Parar, Marcar início, Marcar fim, Voltar e Avançar logo no começo e sem grupos fechados; tela mais limpa, sem os títulos Canais e Ir para; botão FX em cada canal, com os presets e a lista de pré-amplificador, equalizador, delay, chorus, reverb de voz e afinação de voz, todos opcionais; reverb de voz com envio por canal; nome do canal à sua escolha, por exemplo Violão e Voz; mesa que abre vazia, com Adicionar canal e Remover canal; menu Projetos reorganizado, com Novo projeto; botão Editar áudio em cada canal, com tela própria; Inserir arquivo no cursor e Colocar arquivo a partir do cursor, para emendar e para locução sobre trilha; Separar em faixas, com divisões marcadas ouvindo e arquivo ZIP.</p>
+    <p>Versão 1.1 (teste): Remover canal pergunta qual canal tirar, e os de baixo sobem sem perder nada; sem avisos de som alto durante a gravação; tela Editar áudio reorganizada, com Tocar, Parar, Marcar início, Marcar fim, Voltar e Avançar logo no começo e sem grupos fechados; tela mais limpa, sem os títulos Canais e Ir para; botão FX em cada canal, com os presets e a lista de pré-amplificador, equalizador, delay, chorus, reverb de voz e afinação de voz, todos opcionais; reverb de voz com envio por canal; nome do canal à sua escolha, por exemplo Violão e Voz; mesa que abre vazia, com Adicionar canal e Remover canal; menu Projetos reorganizado, com Novo projeto; botão Editar áudio em cada canal, com tela própria; Inserir arquivo no cursor e Colocar arquivo a partir do cursor, para emendar e para locução sobre trilha; Separar em faixas, com divisões marcadas ouvindo e arquivo ZIP.</p>
     <p>Versão 1.0: primeira versão publicada, com seis canais e Master, gravação em um ou vários canais, efeitos e presets por canal, edição, afinação de voz, reverb de voz, projetos e exportação em WAV e MP3.</p>
     <p class="hint">SL-Mix: Áudio Acessível. Versão 1.1. © 2026 Gutenberg Guerra Lima. Todos os direitos reservados.</p>
     <p><button type="button" class="btn primary" id="helpClose2">Fechar instruções</button></p>
@@ -2970,7 +2979,7 @@ function refreshChannels(){
   applyView();recLabel();fxStates();
   $('chInfo').textContent=A===0?'Mesa vazia.':A+(A===1?' canal':' canais')+' de '+N;
   $('btnAddCh').setAttribute('aria-label',A<N?'Adicionar canal. O próximo será o '+chans[A].who+'.':'Adicionar canal. Limite de '+N+' canais atingido.');
-  $('btnRmCh').setAttribute('aria-label',A>0?'Remover canal. O último é o '+chans[A-1].who+'.':'Remover canal. Não há canais.');
+  rmLabel();
 }
 function fxStates(){
   chans.forEach(c=>{
@@ -2978,6 +2987,9 @@ function fxStates(){
     const v=VR.snd[c.i]||0;
     c.vrSum.setAttribute('aria-label',c.who+', reverb de voz, '+(v>0?'envio '+v+' por cento':'desligado'));
   });
+}
+function rmLabel(){
+  $('btnRmCh').setAttribute('aria-label',A>1?'Remover canal. Pergunta qual canal remover.':A===1?'Remover canal. Remove o '+chans[0].who+'.':'Remover canal. Não há canais.');
 }
 function updateNames(){
   fxStates();
@@ -2987,7 +2999,7 @@ function updateNames(){
   Array.from(chSel.options).forEach(o=>{o.text=chLabel(+o.value)});
   Array.from(goSel.options).forEach(o=>{if(/^c\d$/.test(o.value))o.text=chLabel(+o.value[1])});
   if(A<N)$('btnAddCh').setAttribute('aria-label','Adicionar canal. O próximo será o '+chans[A].who+'.');
-  if(A>0)$('btnRmCh').setAttribute('aria-label','Remover canal. O último é o '+chans[A-1].who+'.');
+  rmLabel();
   recLabel();
 }
 function setChName(c,nm,silent){
@@ -3029,18 +3041,73 @@ $('btnAddCh').addEventListener('click',()=>{
   setCount(A+1,true);dirty=true;
   say('Canal '+A+' adicionado. A mesa tem '+A+(A===1?' canal.':' canais.')+(A<N?'':' Limite atingido.'));
 });
+function moveChannelState(src,dst){
+  const was=quiet;quiet=true;
+  try{
+    dst.buffer=src.buffer;dst.name=src.name;dst.edited=src.edited;dst.undo=src.undo;dst.redo=src.redo;
+    setChName(dst,src.custom,true);
+    ['v','p','pg','ph','el','em','eh','dt','df','dm','cr','cd','cm','vs'].forEach(k=>{
+      const e=$(k+'c'+src.i);if(e&&SL[k+'c'+dst.i])SL[k+'c'+dst.i](+e.value,false);
+    });
+    ['mu','so','do','co'].forEach(k=>{
+      const a=TG[k+'c'+src.i],b=TG[k+'c'+dst.i];
+      if(a&&b&&(a.getAttribute('aria-pressed')==='true')!==(b.getAttribute('aria-pressed')==='true'))b.click();
+    });
+    if(!!dst.armed!==!!src.armed)dst.armBtn.click();
+    if(!!dst.bypass!==!!src.bypass)dst.bpBtn.click();
+    refreshLabel(dst);
+  }finally{quiet=was}
+}
+function removeChannelAt(k){
+  if(playing)pause(false);
+  for(let j=k;j<A-1;j++)moveChannelState(chans[j+1],chans[j]);
+  setCount(A-1,true);dirty=true;
+}
+const rmLayer=$('rmLayer'),rmBody=$('rmBody'),rmTitle=$('rmTitle');
+let rmOpen=false,rmSelW=null;
+function rmOptText(c){return c.who+(c.buffer?', com áudio':', vazio')+(c.armed?', armado':'')}
+function openRm(){
+  if(rmOpen)return;
+  rmOpen=true;pushLayer('rm',()=>closeRm(true));
+  rmBody.innerHTML='';
+  rmSelW=selectField('rmSel','Qual canal remover',chans.slice(0,A).map((c,i)=>[String(i),rmOptText(c)]),String(A-1),(v,t)=>say(t));
+  const sl=rmSelW.sel;sl.setAttribute('aria-label','Qual canal remover');
+  rmSelW.querySelector('label').setAttribute('aria-hidden','true');
+  rmBody.append(rmSelW,btn('Remover',doRm,'btn primary'),btn('Cancelar',()=>closeRm(),'btn'));
+  rmLayer.hidden=false;mainEl.inert=true;document.body.classList.add('menu-open');
+  rmLayer.scrollTop=0;rmTitle.focus();
+  say('Remover canal. Escolha qual canal e ative Remover, ou Cancelar. Está escolhido o '+chans[A-1].who+'.');
+}
+function closeRm(fromBack,noFocus){
+  if(!rmOpen)return;
+  if(!fromBack)dropLayer('rm');
+  rmOpen=false;rmLayer.hidden=true;mainEl.inert=false;document.body.classList.remove('menu-open');
+  if(!noFocus){$('btnRmCh').focus();say('Cancelado. Nenhum canal foi removido.')}
+}
+function doRm(){
+  const k=+rmSelW.sel.value,c=chans[k];
+  if(!c)return;
+  if((c.buffer||c.armed)&&!confirmTwice('rmch'+k,c.who+' tem áudio ou está armado. Remover apaga o que há nele. Aperte Remover de novo para confirmar.'))return;
+  const nome=c.who,subiram=k<A-1;
+  closeRm(false,true);
+  removeChannelAt(k);
+  (A>0?$('btnRmCh'):$('btnAddCh')).focus();
+  say(nome+' removido. '+(subiram?'Os canais de baixo subiram, com tudo o que já foi editado. ':'')+'A mesa tem '+A+(A===1?' canal.':' canais.')+(A===0?' Use Adicionar canal para começar.':''));
+}
 $('btnRmCh').addEventListener('click',()=>{
   if(R.state!=='idle'){say('Pare a gravação antes de mudar os canais.');return}
   if(A===0){say('Não há canais para remover.');return}
-  const c=chans[A-1];
-  if((c.buffer||c.armed)&&!confirmTwice('rmch'+A,c.who+' tem áudio ou está armado. Remover apaga o que há nele. Aperte Remover canal de novo para confirmar.'))return;
-  const oldWho=c.who;setCount(A-1,true);dirty=true;
+  if(A>1){openRm();return}
+  const c=chans[0];
+  if((c.buffer||c.armed)&&!confirmTwice('rmch0',c.who+' tem áudio ou está armado. Remover apaga o que há nele. Aperte Remover canal de novo para confirmar.'))return;
+  const oldWho=c.who;removeChannelAt(0);
   say(oldWho+' removido. A mesa tem '+A+(A===1?' canal.':' canais.')+(A===0?' Use Adicionar canal para começar.':''));
 });
 
 /* teclado */
 document.addEventListener('keydown',e=>{
   const t=e.target,tag=t.tagName;
+  if(e.key==='Escape'&&rmOpen){e.preventDefault();closeRm();return}
   if(e.key==='Escape'&&fxOpen){e.preventDefault();closeRack();return}
   if(e.key==='Escape'&&edOpen){e.preventDefault();closeEd();return}
   if(e.key==='Escape'&&projOpen){e.preventDefault();closeProj();return}

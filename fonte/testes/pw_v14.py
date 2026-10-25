@@ -88,7 +88,7 @@ async def main():
             await pg.evaluate("document.getElementById('btnPlay').click()");await pg.wait_for_timeout(1200)
             await pg.evaluate("document.getElementById('btnPlay').click()");await pg.wait_for_timeout(200)
             # remover canal zera o envio
-            await pg.click('#btnRmCh');await pg.click('#btnRmCh');await pg.wait_for_timeout(250)
+            await pg.click('#btnRmCh');await pg.wait_for_timeout(250);await pg.click('#rmBody button:text-is("Remover")');await pg.click('#rmBody button:text-is("Remover")');await pg.wait_for_timeout(250)
             ck('remover canal zera o envio dele',await pg.evaluate("document.getElementById('vsc'+(document.querySelectorAll('[data-ch]:not([hidden])').length)).value")=='0')
             ck('sem rolagem lateral',await pg.evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+1"))
             await c.close()
