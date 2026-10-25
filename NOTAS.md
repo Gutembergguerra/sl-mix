@@ -95,3 +95,9 @@ Pendente: o autor testar com TalkBack e NVDA; ajustes pedidos por ele; depois la
 - Publicar: copiar `site/teste-7k2m9x/*` para a pasta `teste-7k2m9x` deste repositório. O remote precisa continuar `https://github.com/Gutembergguerra/mesa-digital` (o proxy só autoriza o nome antigo; o push redireciona).
 
 - v16 (teste): tirada a lista "Passo" da edição. Botões fixos com o tempo no nome: cursor 30 s, 1 s e 100 ms; Início, Fim e Divisão 1 s e 100 ms. Passo de 10 ms removido. Nome falado sempre com o tempo real ("Voltar 30 segundos").
+
+PENDENTE AUTORIZADO (ainda não programado, fazer junto com os próximos ajustes do usuário):
+- Editar áudio: trocar os nomes falados dos botões de Início, Fim e Divisão para deixar claro que é o ponto marcado da seleção, não o começo do áudio. Ex.: "Mover o início da seleção, voltar 1 segundo", "Mover o fim da seleção, avançar 100 milissegundos", "Mover a divisão, voltar 1 segundo".
+- Em "Separar em faixas": tirar "Voltar 5 s" e "Avançar 5 s" (repetem os botões do cursor).
+- O usuário disse que o TalkBack parece repetir "avançar e voltar 1 segundo" depois do bloco do cursor; é o grupo de Início. Confirmar com ele depois do teste.
+- O usuário ainda está testando e vai trazer mais pedidos. Regra: dúvidas primeiro, código depois.
