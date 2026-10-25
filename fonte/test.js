@@ -103,12 +103,10 @@ console.log('PROJECT TESTS OK');
 
 /* v1.1: zip, split, silences */
 {
-  const a3=new Function(fs.readFileSync('app-body.html','utf8').match(/\/\*PURE-START\*\/([\s\S]*?)\/\*PURE-END\*\//)[1]+';return {crc32,makeZip,pSegments,pEvery,pEqual,pFindSilences}')();
+  const a3=new Function(fs.readFileSync('app-body.html','utf8').match(/\/\*PURE-START\*\/([\s\S]*?)\/\*PURE-END\*\//)[1]+';return {crc32,makeZip,pSegments,pFindSilences}')();
   assert.equal(a3.crc32(new TextEncoder().encode('123456789')),0xCBF43926);
   assert.deepEqual(a3.pSegments(100,[30,60]),[[0,30],[30,60],[60,100]]);
   assert.deepEqual(a3.pSegments(100,[0,100,50,50]),[[0,50],[50,100]]);
-  assert.deepEqual(a3.pEvery(100,40),[40,80]);
-  assert.deepEqual(a3.pEqual(90,3),[30,60]);
   const sr=1000,x=new Float32Array(5000).fill(0);
   for(let i=0;i<1000;i++)x[i]=.5;for(let i=3000;i<5000;i++)x[i]=.5;
   const p=a3.pFindSilences(x,sr,1,-45);

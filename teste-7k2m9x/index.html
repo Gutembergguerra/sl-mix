@@ -64,8 +64,6 @@ p{margin:0}
 .hint{color:var(--muted);font-size:.95rem;max-width:62ch}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.jump a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1.5px solid var(--line-strong);border-radius:4px;color:var(--fg);font-weight:700;text-decoration:none;background:var(--surface)}
 
 .btn,input[type=file]::file-selector-button{
   min-height:48px;padding:0 16px;font:700 1rem var(--font-body);
@@ -97,9 +95,6 @@ summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weig
 .pgrid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
 .chctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
 .chinfo{font-size:.9rem}
-.edblock{margin-top:18px;padding-top:12px;border-top:1px solid rgba(128,128,128,.5)}
-.field.check label{display:flex;gap:8px;align-items:center;font-weight:600}
-.field.check input{width:auto;min-width:24px;min-height:24px}
 .pcol{display:flex;flex-direction:column;gap:10px;min-width:0}
 .row{display:flex;flex-wrap:wrap;gap:8px}
 .field{display:flex;flex-direction:column;gap:4px}
@@ -133,7 +128,6 @@ details.fx>div{display:flex;flex-direction:column;gap:10px;padding:4px 0 12px}
 .meter{height:12px;background:var(--surface-2);border:1px solid var(--line);border-radius:2px;overflow:hidden}
 .meter i{display:block;height:100%;width:0;background:var(--accent)}
 .meter.hot i{background:var(--warn)}
-.viewbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
 .chnav{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
 .chnav select{flex:1;min-width:140px;width:auto}
 .grid.view-lado{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:16px;padding-bottom:12px}
@@ -156,7 +150,7 @@ details.fx>div{display:flex;flex-direction:column;gap:10px;padding:4px 0 12px}
 .grid.view-compacto{grid-template-columns:1fr;gap:8px}
 .grid.view-compacto .card{flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:10px 12px}
 .grid.view-compacto .card h3{min-width:112px}
-.grid.view-compacto .filerow,.grid.view-compacto .ctl-pan,.grid.view-compacto details.fx,.grid.view-compacto .rack-btn{display:none}
+.grid.view-compacto .filerow,.grid.view-compacto .ctl-pan,.grid.view-compacto .rack-btn{display:none}
 .grid.view-compacto .ctl-vol{flex:1 1 260px}
 .grid.view-compacto .pair{grid-template-columns:auto auto}
 .grid.view-compacto .more-btn{display:inline-flex;align-items:center}
@@ -170,15 +164,12 @@ details.fx>div{display:flex;flex-direction:column;gap:10px;padding:4px 0 12px}
   .transport .time{margin-left:auto}
 }
 /* faixas */
-.tbar,.fxmenu,.prpane{display:none}
-.grid.view-faixas .card>.fxmenu.pane-show{flex-direction:row;flex-wrap:wrap;gap:6px}
+.tbar{display:none}
 .grid.view-faixas{grid-template-columns:1fr;gap:8px}
 .grid.view-faixas .tbar{display:flex;flex-wrap:wrap;gap:6px}
 .tbar .btn{min-height:44px;padding:0 10px}
-.grid.view-faixas .card>.filerow,.grid.view-faixas .card>.ctl,.grid.view-faixas .card>details.fx,.grid.view-faixas .card>.rack-btn,.grid.view-faixas .card>.pair,.grid.view-faixas .card>.more-btn,.grid.view-faixas .card>.ed-btn{display:none}
+.grid.view-faixas .card>.filerow,.grid.view-faixas .card>.ctl,.grid.view-faixas .card>.rack-btn,.grid.view-faixas .card>.pair,.grid.view-faixas .card>.more-btn,.grid.view-faixas .card>.ed-btn{display:none}
 .grid.view-faixas .card>.pane-show{display:flex!important;flex-direction:column}
-.grid.view-faixas .card>details.pane-show{display:block!important}
-.grid.view-faixas .card>details.pane-show>summary{display:none}
 .tb-open[aria-expanded="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
 .tb-open[aria-expanded="true"]::after{content:" ▾"}
 
@@ -210,7 +201,7 @@ h1{font-size:1.3rem;margin:0}
 .sum{color:var(--muted);font-size:.9rem;overflow-wrap:anywhere;margin:0}
 .grid.view-lista .sum,.grid.view-lado .sum,.grid.view-um .sum{display:none}
 .grid.view-mesa .more-btn{display:inline-flex;align-items:center;justify-content:center}
-.grid.view-mesa details.fx,.grid.view-mesa .rack-btn{display:none}
+.grid.view-mesa .rack-btn{display:none}
 .grid.view-compacto .sum{flex:1 1 100%;order:9}
 .menu-layer{position:fixed;inset:0;z-index:50;background:var(--bg);overflow-y:auto;padding:max(12px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px))}
 .menu-box{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
@@ -301,7 +292,6 @@ header .field label{font-size:.85rem}
     </div>
 
     <div class="colC">
-      <h2 id="h-canais" tabindex="-1">Canais</h2>
       <div class="chctl">
         <button type="button" class="btn primary" id="btnAddCh">Adicionar canal</button>
         <button type="button" class="btn" id="btnRmCh">Remover canal</button>
@@ -426,7 +416,7 @@ header .field label{font-size:.85rem}
     <p>A lista “Ir para” leva direto a um canal ou a uma seção. A lista “Visualização dos canais” muda como os canais aparecem. Compacto mostra só volume, mudo, solo, armar e o botão Ajustes e efeitos. Faixas mostra uma linha de botões por canal. Lista mostra tudo de cada canal. Lado a lado põe os canais lado a lado, para passar com o dedo. Um canal por vez mostra só um. Mesa vertical deixa os volumes como faders em pé.</p>
 
     <h3>1b. Adicionar e remover canais</h3>
-    <p>A mesa abre sem canais. Na área Canais, ative “Adicionar canal” quantas vezes precisar, até 6. “Remover canal” tira o último canal; se ele tiver áudio, é preciso apertar de novo para confirmar. Os números dos canais seguem a ordem em que foram criados. Para dar um nome ao canal, como Violão ou Voz, ative “Ajustes e efeitos” do canal e escreva no campo “Nome do canal”. O leitor passa a falar esse nome nos botões, nas listas e nas mensagens, e o nome fica salvo no projeto. Para voltar a Canal e o número, apague o texto do campo.</p>
+    <p>A mesa abre sem canais. Logo abaixo da lista “Ir para”, ative “Adicionar canal” quantas vezes precisar, até 6. “Remover canal” tira o último canal; se ele tiver áudio, é preciso apertar de novo para confirmar. Os números dos canais seguem a ordem em que foram criados. Para dar um nome ao canal, como Violão ou Voz, ative “Ajustes e efeitos” do canal e escreva no campo “Nome do canal”. O leitor passa a falar esse nome nos botões, nas listas e nas mensagens, e o nome fica salvo no projeto. Para voltar a Canal e o número, apague o texto do campo.</p>
 
     <h3>2. Carregar um arquivo de áudio</h3>
     <ol>
@@ -529,7 +519,7 @@ header .field label{font-size:.85rem}
     </ul>
 
     <h3>Novidades</h3>
-    <p>Versão 1.1 (teste): botão FX em cada canal, com os presets e a lista de pré-amplificador, equalizador, delay, chorus, reverb de voz e afinação de voz, todos opcionais; reverb de voz com envio por canal; nome do canal à sua escolha, por exemplo Violão e Voz; mesa que abre vazia, com Adicionar canal e Remover canal; menu Projetos reorganizado, com Novo projeto; botão Editar áudio em cada canal, com tela própria; Inserir arquivo no cursor e Colocar arquivo a partir do cursor, para emendar e para locução sobre trilha; Separar em faixas, com divisões marcadas ouvindo e arquivo ZIP.</p>
+    <p>Versão 1.1 (teste): tela mais limpa, sem o título Canais; botão FX em cada canal, com os presets e a lista de pré-amplificador, equalizador, delay, chorus, reverb de voz e afinação de voz, todos opcionais; reverb de voz com envio por canal; nome do canal à sua escolha, por exemplo Violão e Voz; mesa que abre vazia, com Adicionar canal e Remover canal; menu Projetos reorganizado, com Novo projeto; botão Editar áudio em cada canal, com tela própria; Inserir arquivo no cursor e Colocar arquivo a partir do cursor, para emendar e para locução sobre trilha; Separar em faixas, com divisões marcadas ouvindo e arquivo ZIP.</p>
     <p>Versão 1.0: primeira versão publicada, com seis canais e Master, gravação em um ou vários canais, efeitos e presets por canal, edição, afinação de voz, reverb de voz, projetos e exportação em WAV e MP3.</p>
     <p class="hint">SL-Mix: Áudio Acessível. Versão 1.1. © 2026 Gutenberg Guerra Lima. Todos os direitos reservados.</p>
     <p><button type="button" class="btn primary" id="helpClose2">Fechar instruções</button></p>
@@ -903,8 +893,6 @@ function pSegments(total,pts){
   u.concat([total]).forEach(function(x){if(x>prev)segs.push([prev,x]);prev=x});
   return segs;
 }
-function pEvery(total,step){var o=[];if(step<1)return o;for(var x=step;x<total;x+=step)o.push(x);return o}
-function pEqual(total,n){var o=[];for(var k=1;k<n;k++)o.push(Math.round(total*k/n));return o}
 function pFindSilences(x,sr,minSec,thrDb){
   var w=Math.max(1,Math.floor(.01*sr)),nw=Math.floor(x.length/w),thr=Math.pow(10,thrDb/20),
       need=Math.max(1,Math.ceil(minSec*sr/w)),pts=[],loud=[],first=-1,last=-1,i,k;
@@ -921,7 +909,6 @@ function pFindSilences(x,sr,minSec,thrDb){
   }
   return pts;
 }
-function pSilenceGap(nch,n){var o=[];for(var k=0;k<nch;k++)o.push(new Float32Array(n));return o}
 /*PURE-END*/
 
 const N=6;
@@ -931,7 +918,7 @@ let quiet=false,dirty=false;
 function say(t){if(quiet)return;region.textContent='';setTimeout(()=>{region.textContent=t},40)}
 const $=id=>document.getElementById(id);
 const SL={},SE={},TG={};
-const KEEP_SEL=['recMulti','mcomp','mrevt','mbar','recCh','recCount','edCh','edStep','tuCh','tuScale','tuKey','tuSpeed','tuRange','mp3q','vrCh','vrPreset'];
+const KEEP_SEL=['recMulti','mcomp','mrevt','mbar','recCh','recCount','edCh','edStep','tuCh','tuScale','tuKey','tuSpeed','tuRange','mp3q','vrPreset'];
 
 /* ---------- helpers ---------- */
 function h(tag,props,...kids){
@@ -1695,10 +1682,7 @@ function doSnap(){
 /* ---------- construção da interface ---------- */
 /* faixa: uma linha de botões por canal, navegável com setas */
 const BAR=[['vol','Volume'],['pan','Pan'],['fx','FX'],['file','Áudio']];
-const FXLIST=[['pre','Pré-amplificador'],['eq','Equalizador'],['dly','Delay'],['cho','Chorus']];
-const FXSET=FXLIST.map(x=>x[0]);
-const paneOpener=k=>FXSET.includes(k)?'fx':k;
-function buildBar(c,panes,moreBtn){
+function buildBar(c,panes){
   c.panes=panes;c.pane=null;c.openers={};
   c.tb=h('div',{class:'tbar',role:'toolbar','aria-label':c.who+', controles. Use as setas para a direita e para a esquerda.','aria-orientation':'horizontal'});
   BAR.forEach(([k,label])=>{
@@ -1710,23 +1694,15 @@ function buildBar(c,panes,moreBtn){
   const edt=btn('Editar',()=>openEd(c.i,edt),'btn tb-open',{'aria-label':c.who+', editar áudio','aria-haspopup':'dialog','aria-expanded':'false'});
   c.openers.ed=edt;
   c.tb.append(c.openers.vol,c.openers.pan,c.openers.fx,c.openers.file,edt,mais);
-  const fm=h('div',{class:'fxmenu',role:'group','aria-label':c.who+', escolher efeito'});
-  c.fxBtns={};
-  FXLIST.forEach(([k,label])=>{
-    const b=btn(label,()=>selectFx(c,k),'btn fxsel',{'aria-pressed':'false','aria-label':c.who+', '+label.toLowerCase()});
-    c.fxBtns[k]=b;fm.append(b);
-  });
-  c.panes.fx=fm;c.fxMenu=fm;
   c.tb.addEventListener('keydown',e=>barKey(c,e));
-  c.sec.querySelector('h3').after(c.tb);c.tb.after(fm);
+  c.sec.querySelector('h3').after(c.tb);
   c.sec.addEventListener('keydown',e=>{
     if(e.key==='Escape'&&view==='faixas'&&c.pane&&!menuOpen&&!e.target.closest('.tbar')){
-      e.preventDefault();e.stopPropagation();c.openers[paneOpener(c.pane)].focus();
+      e.preventDefault();e.stopPropagation();c.openers[c.pane].focus();
     }
   });
 }
 function barItems(c){return Array.from(c.tb.querySelectorAll('button'))}
-function barRove(){}
 function barKey(c,e){
   const it=barItems(c),i=it.indexOf(document.activeElement);if(i<0)return;
   let n=-1;
@@ -1737,17 +1713,16 @@ function barKey(c,e){
   else if(e.key==='ArrowDown'||e.key==='ArrowUp'){
     const k=c.i+(e.key==='ArrowDown'?1:-1);
     if(k<0||k>=A)return;
-    e.preventDefault();const o=chans[k];barRove(o,Math.min(i,barItems(o).length-1));barItems(o)[Math.min(i,barItems(o).length-1)].focus();return;
+    e.preventDefault();const o=chans[k];barItems(o)[Math.min(i,barItems(o).length-1)].focus();return;
   }
   else return;
-  e.preventDefault();barRove(c,n);it[n].focus();
+  e.preventDefault();it[n].focus();
 }
 function barEnter(c){
   if(c.inBar)return;c.inBar=true;
   c.tb.insertBefore(c.armBtn,c.openers.vol);
   c.tb.insertBefore(c.muteBtn,c.openers.pan);
   c.tb.insertBefore(c.soloBtn,c.openers.pan);
-  barRove(c,0);
 }
 function barLeave(c){
   if(!c.inBar)return;c.inBar=false;
@@ -1757,12 +1732,10 @@ function barLeave(c){
   c.muteBtn.removeAttribute('tabindex');c.soloBtn.removeAttribute('tabindex');c.armBtn.removeAttribute('tabindex');
 }
 function showPane(c,k,silent){
-  const shown=!k?[]:k==='fx'?['fx']:FXSET.includes(k)?['fx',k]:[k];
+  const shown=k?[k]:[];
   Object.keys(c.panes).forEach(x=>c.panes[x].classList.toggle('pane-show',shown.includes(x)));
-  Object.keys(c.openers).forEach(x=>c.openers[x].setAttribute('aria-expanded',String(!!k&&x===paneOpener(k))));
-  Object.keys(c.fxBtns).forEach(x=>c.fxBtns[x].setAttribute('aria-pressed',String(x===k)));
+  Object.keys(c.openers).forEach(x=>c.openers[x].setAttribute('aria-expanded',String(!!k&&x===k)));
   c.pane=k;
-  if(k&&c.panes[k].tagName==='DETAILS')c.panes[k].open=true;
   if(k){
     if(!paneLayer){paneLayer=true;pushLayer('pane',closePaneByBack)}
     paneOwner=c;
@@ -1775,16 +1748,10 @@ function focusPane(c,k){
 function togglePane(c,k){
   if(k==='fx'){openRack(c.i,c.openers.fx);return}
   const label=BAR.find(x=>x[0]===k)[1];
-  if(paneOpener(c.pane)===k){showPane(c,null);say(c.who+', '+label+', fechado.');return}
+  if(c.pane===k){showPane(c,null);say(c.who+', '+label+', fechado.');return}
   showPane(c,k);
-  if(k==='fx'){c.fxBtns.pre.focus();say(c.who+', Efeitos. Escolha pré-amplificador, equalizador, delay, chorus ou reverb.');return}
   focusPane(c,k);
   say(c.who+', '+label+', opções abertas. Esc volta para a faixa.');
-}
-function selectFx(c,k){
-  if(c.pane===k){showPane(c,'fx');c.fxBtns[k].focus();say(c.who+', efeito fechado.');return}
-  showPane(c,k);focusPane(c,k);
-  say(c.who+', '+FXLIST.find(x=>x[0]===k)[1]+', opções abertas. Esc volta para Efeitos.');
 }
 const FXDEF={pre:0,heat:0,low:0,mid:0,high:0,dTime:300,dFb:35,dMix:30,cRate:.8,cDepth:50,cMix:40};
 const FXID={pre:'pg',heat:'ph',low:'el',mid:'em',high:'eh',dTime:'dt',dFb:'df',dMix:'dm',cRate:'cr',cDepth:'cd',cMix:'cm'};
@@ -1958,7 +1925,7 @@ function buildChannel(i){
     c.rackStore,c.extra);
   c.menuNodes=[c.nameW,filerow,pan.wrap,c.rackBtn,c.extra];
   c.pairEl=c.sec.querySelector('.pair');c.sec.hidden=true;
-  buildBar(c,{vol:vol.wrap,pan:pan.wrap,pre:preBox,eq:eqBox,dly:dBox,cho:cBox,file:filerow},more);
+  buildBar(c,{vol:vol.wrap,pan:pan.wrap,file:filerow});
   c.sec.addEventListener('dblclick',e=>{if(e.target.closest('input,button,select,summary,a'))return;openMenu(c.i,more)});
   c.sec.addEventListener('contextmenu',e=>{if(e.target.closest('input,button,select,summary,a'))return;e.preventDefault();openMenu(c.i,more)});
   c.sec.style.setProperty('--h',String([205,160,35,285,345,95][i]));
@@ -2665,7 +2632,7 @@ document.addEventListener('input',markDirty);
 document.addEventListener('change',markDirty);
 document.addEventListener('click',e=>{
   const b=e.target.closest&&e.target.closest('button[aria-pressed]');
-  if(b&&!b.hasAttribute('data-view')&&!b.classList.contains('acc-btn')&&!b.classList.contains('arm')&&!b.classList.contains('fxsel'))markDirty(e);
+  if(b&&!b.hasAttribute('data-view')&&!b.classList.contains('acc-btn')&&!b.classList.contains('arm'))markDirty(e);
 });
 window.addEventListener('beforeunload',e=>{if(dirty&&hasAudio()){e.preventDefault();e.returnValue=''}});
 
@@ -2716,7 +2683,7 @@ window.addEventListener('popstate',()=>{
 });
 function closePaneByBack(){
   const o=paneOwner,k=o&&o.pane;paneLayer=false;paneOwner=null;
-  if(o){showPane(o,null,true);if(k&&o.openers[paneOpener(k)]&&o.sec.offsetParent!==null)o.openers[paneOpener(k)].focus()}
+  if(o){showPane(o,null,true);if(k&&o.openers[k]&&o.sec.offsetParent!==null)o.openers[k].focus()}
 }
 let menuOpen=false,menuCh=0,menuOpener=null;
 const menuLayer=$('menuLayer'),menuBody=$('menuBody'),menuTitle=$('menuTitle'),mainEl=$('main');
@@ -2920,7 +2887,7 @@ goSel.append(h('option',{value:'',text:'Escolher destino…'}),h('option',{value
 Object.keys(SECNAME).forEach(k=>goSel.append(h('option',{value:k,text:SECNAME[k][1]})));
 goSel.addEventListener('change',()=>{
   const v=goSel.value;goSel.value='';if(!v)return;
-  if(v==='canais'){$('h-canais').focus();$('h-canais').scrollIntoView();return}
+  if(v==='canais'){$('btnAddCh').focus();$('btnAddCh').scrollIntoView();return}
   if(v[0]==='c'&&/^c\d$/.test(v)){showChannel(+v[1]);chans[+v[1]].sec.scrollIntoView({block:'nearest'});return}
   goSection(v);
 });
@@ -3003,7 +2970,7 @@ function setChName(c,nm,silent){
   if(old===c.who)return;
   c.titleTxt.textContent=c.who;
   const els=new Set();
-  [c.sec,c.tb,c.fxMenu].concat(c.menuNodes).forEach(r=>{
+  [c.sec,c.tb].concat(c.menuNodes).forEach(r=>{
     if(!r)return;els.add(r);r.querySelectorAll('[aria-label]').forEach(e=>els.add(e));
     r.querySelectorAll('label').forEach(l=>{if(l.textContent.indexOf('Preset de efeitos')===0)l.textContent='Preset de efeitos '+c.de});
   });
