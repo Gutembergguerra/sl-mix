@@ -31,7 +31,7 @@ async def main():
             # campos início/fim e passos
             await pg.fill('#edA','2');await pg.press('#edA','Tab');await pg.fill('#edB','4');await pg.press('#edB','Tab')
             ck('seleção',('Duração 2,0' in await say()),await say())
-            await pg.click('text=Fim: avançar');t=await say();ck('fim avança',('4 segundos e 100' in t) or ('Fim em 4' in t),t)
+            await pg.click('[aria-label="Fim: avançar 100 milissegundos"]');t=await say();ck('fim avança',('4 segundos e 100' in t) or ('Fim em 4' in t),t)
             await pg.click('text=Ouvir trecho');ck('ouvir',('Tocando' in await say()))
             await pg.click('button:text-is("Cortar")');ck('cortou','Corte feito' in await say(),await say())
             await pg.click('button:text-is("Desfazer")');ck('desfez','Desfeito' in await say())

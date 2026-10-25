@@ -93,3 +93,5 @@ Pendente: o autor testar com TalkBack e NVDA; ajustes pedidos por ele; depois la
 - `fonte/test.js` e `fonte/test_tune.js`: testes das funções puras (`node test.js`).
 - `fonte/testes/*.py`: testes de navegador (Playwright; o mais novo é pw_v16.py, fluxo de marcar, tocar do início marcado e cortar na tela Editar áudio; pw_v14.py, FX e envio de reverb; pw_v15.py, afinação; pw_v13.py, nome dos canais; pw_v12.py, Editar áudio). Os testes pw2_v2 e pw3_v2 (seções antigas de afinação e reverb) foram removidos. `run6.py arquivo.py` adiciona 6 canais antes de rodar os testes antigos. Servem um site em `/home/claude/mesa/site`.
 - Publicar: copiar `site/teste-7k2m9x/*` para a pasta `teste-7k2m9x` deste repositório. O remote precisa continuar `https://github.com/Gutembergguerra/mesa-digital` (o proxy só autoriza o nome antigo; o push redireciona).
+
+- v16 (teste): tirada a lista "Passo" da edição. Botões fixos com o tempo no nome: cursor 30 s, 1 s e 100 ms; Início, Fim e Divisão 1 s e 100 ms. Passo de 10 ms removido. Nome falado sempre com o tempo real ("Voltar 30 segundos").
