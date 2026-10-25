@@ -79,7 +79,8 @@ Novidades da 1.1: botão FX em cada canal, que abre a tela de efeitos do canal c
 Pendente: o autor testar com TalkBack e NVDA; ajustes pedidos por ele; depois lançar como oficial.
 
 ## Pendências combinadas
-- Nenhuma por enquanto. O autor decidiu manter a seção Gravação e a lista "Ir para" como estão, e ainda está testando; ele junta os próximos pedidos numa mudança só.
+- Tirar da tela o título "Ir para" que fica em cima da lista (a que mostra "Escolher destino…"). A lista continua; o nome "Ir para" passa para dentro do campo (aria-label) e o texto de fora some, para o leitor falar uma vez só.
+- Nenhuma outra por enquanto. O autor decidiu manter a seção Gravação e a lista "Ir para" como estão, e ainda está testando; ele junta os próximos pedidos numa mudança só.
 - Limpeza feita na 1.1 (cache teste v9): tirado o título "Canais" da tela (Ir para > Canais agora leva ao botão Adicionar canal), o menu antigo de efeitos da faixa, estilos e funções sem uso. Ao programar, remover o que ficar sem uso para o código não crescer.
 
 ## Código-fonte (pasta `fonte`)
