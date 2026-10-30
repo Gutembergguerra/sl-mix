@@ -17,13 +17,13 @@ import os,shutil,re
 BETA='teste-7k2m9x'
 bd='/home/claude/mesa/site/'+BETA
 os.makedirs(bd,exist_ok=True)
-bh=html.replace('<title>SL-Mix: Áudio Acessível</title>','<title>SL-Mix Teste</title>').replace('<h1>SL-Mix</h1>','<h1>SL-Mix Teste</h1>')
+bh=html.replace('<title>SL-Mixer: Áudio Acessível</title>','<title>SL-Mixer Teste</title>').replace('<h1>SL-Mixer</h1>','<h1>SL-Mixer Teste</h1>')
 open(bd+'/index.html','w').write(bh)
 for f in ('icon-192.png','icon-512.png'):
     shutil.copy('/home/claude/mesa/site/'+f,bd+'/'+f)
 mf=open('/home/claude/mesa/site/manifest.webmanifest',encoding='utf-8').read()
-mf=mf.replace('"name": "SL-Mix: Áudio Acessível"','"name": "SL-Mix Teste"').replace('"short_name": "SL-Mix"','"short_name": "SL-Mix Teste"')
+mf=mf.replace('"name": "SL-Mixer: Áudio Acessível"','"name": "SL-Mixer Teste"').replace('"short_name": "SL-Mixer"','"short_name": "SL-Mixer Teste"')
 open(bd+'/manifest.webmanifest','w',encoding='utf-8').write(mf)
-sw2=re.sub(r"const CACHE = '[^']*';","const CACHE = 'sl-mix-teste-v16';",sw)
+sw2=re.sub(r"const CACHE = '[^']*';","const CACHE = 'sl-mix-teste-v17';",sw)
 sw2=re.sub(r"\n  if \(url.indexOf\('/teste-'\)[^\n]*",'',sw2)
 open(bd+'/sw.js','w').write(sw2)

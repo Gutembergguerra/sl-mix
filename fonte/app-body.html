@@ -1,5 +1,5 @@
-<!-- SL-Mix: Áudio Acessível. © 2026 Gutenberg Guerra Lima. Todos os direitos reservados. -->
-<title>SL-Mix: Áudio Acessível</title>
+<!-- SL-Mixer: Áudio Acessível. © 2026 Gutenberg Guerra Lima. Todos os direitos reservados. -->
+<title>SL-Mixer: Áudio Acessível</title>
 <meta name="author" content="Gutenberg Guerra Lima">
 <meta name="copyright" content="© 2026 Gutenberg Guerra Lima. Todos os direitos reservados.">
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -253,7 +253,7 @@ header .field label{font-size:.85rem}
 
 <div class="wrap" id="main">
   <header>
-    <h1>SL-Mix</h1>
+    <h1>SL-Mixer</h1>
       <button type="button" class="btn" id="btnProj" aria-haspopup="dialog">Projetos e arquivos</button>
     <div class="field"><label for="viewSel">Visualização dos canais</label>
         <select id="viewSel" data-nav>
@@ -395,14 +395,14 @@ header .field label{font-size:.85rem}
       <h2 id="helpTitle" tabindex="-1">Instruções do aplicativo</h2>
       <button type="button" class="btn primary" id="helpClose">Fechar</button>
     </div>
-    <h3>Sobre o SL-Mix</h3>
-    <p>O SL-Mix é o aplicativo ideal para os amantes da produção de áudio, desenvolvido para atender tanto profissionais quanto entusiastas do som.</p>
+    <h3>Sobre o SL-Mixer</h3>
+    <p>O SL-Mixer é o aplicativo ideal para os amantes da produção de áudio, desenvolvido para atender tanto profissionais quanto entusiastas do som.</p>
     <p>Com uma interface simples, intuitiva e muito fácil de usar, o aplicativo oferece um console prático e eficiente para criação de vinhetas, comerciais, gravações de músicas, edições e muito mais.</p>
 
     <h3>Acessibilidade em Primeiro Lugar</h3>
-    <p>Pensado para facilitar o dia a dia da comunidade, o SL-Mix foi especialmente desenvolvido com foco total em acessibilidade. Ele conta com suporte otimizado para leitores de tela como TalkBack e NVDA, permitindo que pessoas com deficiência visual naveguem e produzam seus projetos com total autonomia e precisão.</p>
+    <p>Pensado para facilitar o dia a dia da comunidade, o SL-Mixer foi especialmente desenvolvido com foco total em acessibilidade. Ele conta com suporte otimizado para leitores de tela como TalkBack e NVDA, permitindo que pessoas com deficiência visual naveguem e produzam seus projetos com total autonomia e precisão.</p>
 
-    <h3>Destaques do SL-Mix</h3>
+    <h3>Destaques do SL-Mixer</h3>
     <ul>
       <li><strong>Interface Simples e Prática:</strong> Ideal para criar e editar sem complicações.</li>
       <li><strong>100% Acessível:</strong> Excelente navegação e resposta para usuários de leitor de tela (TalkBack e NVDA).</li>
@@ -524,7 +524,7 @@ header .field label{font-size:.85rem}
     <h3>Novidades</h3>
     <p>Versão 1.1 (teste): Remover canal pergunta qual canal tirar, e os de baixo sobem sem perder nada; sem avisos de som alto durante a gravação; tela Editar áudio reorganizada, com Tocar, Parar, Marcar início, Marcar fim, botões de voltar e avançar 30 segundos, 1 segundo e 100 milissegundos, cada um com o tempo no nome, sem a lista Passo e sem grupos fechados; tela mais limpa, sem os títulos Canais e Ir para; botão FX em cada canal, com os presets e a lista de pré-amplificador, equalizador, delay, chorus, reverb de voz e afinação de voz, todos opcionais; reverb de voz com envio por canal; nome do canal à sua escolha, por exemplo Violão e Voz; mesa que abre vazia, com Adicionar canal e Remover canal; menu Projetos reorganizado, com Novo projeto; botão Editar áudio em cada canal, com tela própria; Inserir arquivo no cursor e Colocar arquivo a partir do cursor, para emendar e para locução sobre trilha; Separar em faixas, com divisões marcadas ouvindo e arquivo ZIP.</p>
     <p>Versão 1.0: primeira versão publicada, com seis canais e Master, gravação em um ou vários canais, efeitos e presets por canal, edição, afinação de voz, reverb de voz, projetos e exportação em WAV e MP3.</p>
-    <p class="hint">SL-Mix: Áudio Acessível. Versão 1.1. © 2026 Gutenberg Guerra Lima. Todos os direitos reservados.</p>
+    <p class="hint">SL-Mixer: Áudio Acessível. Versão 1.1. © 2026 Gutenberg Guerra Lima. Todos os direitos reservados.</p>
     <p><button type="button" class="btn primary" id="helpClose2">Fechar instruções</button></p>
   </div>
 </div>
@@ -2616,7 +2616,7 @@ async function newProject(){
 async function importFile(file){
   try{
     const p=unpackProject(await file.arrayBuffer());
-    if(!p||!Array.isArray(p.chs)||p.chs.length!==N){say('Este arquivo não é um projeto do SL-Mix.');return}
+    if(!p||!Array.isArray(p.chs)||p.chs.length!==N){say('Este arquivo não é um projeto do SL-Mixer.');return}
     say('Importando o projeto. Aguarde.');
     await applyProject(p.meta||{},p.chs);
     curProject='';nameInp.value=(p.meta&&p.meta.name)||'';dirty=false;

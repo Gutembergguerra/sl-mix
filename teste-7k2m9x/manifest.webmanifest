@@ -1,6 +1,6 @@
 {
-  "name": "SL-Mix Teste",
-  "short_name": "SL-Mix Teste",
+  "name": "SL-Mixer Teste",
+  "short_name": "SL-Mixer Teste",
   "description": "Mesa de áudio com seis canais, gravação e edição, acessível ao TalkBack e ao NVDA.",
   "lang": "pt-BR",
   "start_url": "./",

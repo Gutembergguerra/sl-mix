@@ -1,4 +1,4 @@
-# SL-Mix: Áudio Acessível. Notas do projeto
+# SL-Mixer: Áudio Acessível. Notas do projeto
 
 Aplicativo web (PWA) de mesa de áudio com 6 canais e Master, feito para funcionar bem com leitor de tela (NVDA no Windows, TalkBack no Android). Autor: Gutenberg Guerra Lima. Todos os direitos reservados.
 
@@ -34,13 +34,13 @@ Volume, pan, mudo, solo e armar por canal. Efeitos por canal (pré-amplificador,
 
 ## Versões
 - Versão atual: 1.0. Número e "Novidades" ficam no fim das Instruções do aplicativo (em index.html).
-- Plano: o app oficial (raiz do site) muda só no lançamento mensal. As novidades são testadas antes em uma cópia de teste, em uma pasta com nome reservado do mesmo site, que se instala como "SL-Mix Teste". A cópia tem seu próprio sw.js e cache. Ao lançar, copiar o index.html aprovado para a raiz, subir o número da versão, atualizar "Novidades" e marcar a release.
+- Plano: o app oficial (raiz do site) muda só no lançamento mensal. As novidades são testadas antes em uma cópia de teste, em uma pasta com nome reservado do mesmo site, que se instala como "SL-Mixer Teste". A cópia tem seu próprio sw.js e cache. Ao lançar, copiar o index.html aprovado para a raiz, subir o número da versão, atualizar "Novidades" e marcar a release.
 - O endereço do app oficial deve ser trocado para o nome sl-mix (renomear o repositório). Quem usava o link antigo precisa instalar de novo, e projetos devem ser exportados antes.
 
 ## Texto de abertura (também no começo das Instruções e para o APK)
-O SL-Mix é o aplicativo ideal para os amantes da produção de áudio, desenvolvido para atender tanto profissionais quanto entusiastas do som.
+O SL-Mixer é o aplicativo ideal para os amantes da produção de áudio, desenvolvido para atender tanto profissionais quanto entusiastas do som.
 Com uma interface simples, intuitiva e muito fácil de usar, o aplicativo oferece um console prático e eficiente para criação de vinhetas, comerciais, gravações de músicas, edições e muito mais.
-Acessibilidade em Primeiro Lugar: pensado para facilitar o dia a dia da comunidade, o SL-Mix foi especialmente desenvolvido com foco total em acessibilidade, com suporte otimizado para TalkBack e NVDA, permitindo que pessoas com deficiência visual naveguem e produzam seus projetos com total autonomia e precisão.
+Acessibilidade em Primeiro Lugar: pensado para facilitar o dia a dia da comunidade, o SL-Mixer foi especialmente desenvolvido com foco total em acessibilidade, com suporte otimizado para TalkBack e NVDA, permitindo que pessoas com deficiência visual naveguem e produzam seus projetos com total autonomia e precisão.
 Destaques: Interface Simples e Prática; 100% Acessível; Versátil; Para Todos.
 Idealizado e Desenvolvido por: Gutenberg Guerra Lima
 
@@ -52,7 +52,7 @@ Idealizado e Desenvolvido por: Gutenberg Guerra Lima
 5. Edição de vídeo, em etapas (versão 2.0): primeiro importar vídeo, mixar o áudio na mesa e exportar o vídeo com o novo áudio.
 6. Idiomas: primeiro extrair todos os textos do código para listas de tradução, depois inglês, depois espanhol e outros. Informar o idioma ao leitor de tela.
 7. Programa separado para Windows para aplicar plugins VST3 (biblioteca pedalboard, em Python), processando arquivos e exportando WAV, com controles acessíveis a partir dos parâmetros do plugin. Só se o autor pedir.
-8. Lançamento mensal: as novidades são testadas na cópia de teste (SL-Mix Teste) e passam para o app oficial uma vez por mês, com número de versão e "Novidades" nas Instruções.
+8. Lançamento mensal: as novidades são testadas na cópia de teste (SL-Mixer Teste) e passam para o app oficial uma vez por mês, com número de versão e "Novidades" nas Instruções.
 
 ## Ideias de atualizações (banco de ideias, não programadas)
 Para mostrar movimento aos clientes: tela "Novidades" na primeira abertura após cada atualização; botão "Enviar sugestão" que abre o e-mail do projeto; lista "Em breve" nas Instruções.

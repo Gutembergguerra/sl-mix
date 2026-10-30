@@ -27,4 +27,4 @@ jobs:
         run: |
           cp android/app/build/outputs/apk/debug/app-debug.apk SL-Mix-teste.apk
           gh release delete apk-teste -y --cleanup-tag || true
-          gh release create apk-teste SL-Mix-teste.apk --prerelease --title "APK de teste do SL-Mix" --notes "APK de teste. Abre o SL-Mix pelo Chrome, em tela cheia. Para instalar, baixe e permita a instalação de fontes desconhecidas."
+          gh release create apk-teste SL-Mix-teste.apk --prerelease --title "APK de teste do SL-Mixer" --notes "APK de teste. Abre o SL-Mixer pelo Chrome, em tela cheia. Para instalar, baixe e permita a instalação de fontes desconhecidas."
